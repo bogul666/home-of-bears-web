@@ -12,11 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Pobranie kodu bez sprawdzania historii Gita (zapobiega exit code 128)
+      # 1. Pobranie kodu (z wyłączoną pełną historią, co zapobiega błędowi git)
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       # 2. Konfiguracja Node.js
       - name: Setup Node.js
@@ -31,7 +29,7 @@ jobs:
           npm install --legacy-peer-deps
           npm run build
 
-      # 4. Wgrywanie plików przez FTP
+      # 4. Wgrywanie plików przez FTP z ignorowaniem Gita
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -40,3 +38,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           local-dir: ./dist/
+          git-status-untracked: false
