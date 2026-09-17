@@ -12,24 +12,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Pobranie kodu (z wyłączoną pełną historią, co zapobiega błędowi git)
+      # 1. Pobranie kodu z pełną historią
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # 2. Konfiguracja Node.js
+      # 2. Skonfigurowanie tożsamości Gita (naprawia błąd exit code 128)
+      - name: Set up Git config
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # 3. Konfiguracja Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      # 3. Instalacja zależności i budowanie pliku dist
+      # 4. Instalacja zależności i budowanie pliku dist
       - name: Install dependencies & Build
         run: |
           npm install --legacy-peer-deps
           npm run build
 
-      # 4. Wgrywanie plików przez FTP z ignorowaniem Gita
+      # 5. Wgrywanie plików przez FTP
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -38,4 +46,3 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           local-dir: ./dist/
-          git-status-untracked: false
