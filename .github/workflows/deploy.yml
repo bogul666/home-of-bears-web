@@ -23,10 +23,9 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      # 3. Instalacja zależności i budowanie pliku dist
       - name: Install dependencies & Build
         run: |
-          npm ci
+          npm install --legacy-peer-deps
           npm run build
 
       # 4. Wszycie automatycznego transferu plików FTP
