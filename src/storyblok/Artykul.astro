@@ -1,0 +1,89 @@
+---
+import { storyblokEditable, renderRichText } from '@storyblok/astro';
+const { blok } = Astro.props;
+
+// Zabezpieczenie przed błędem z WordPressa: 
+// Sprawdzamy czy treść to surowy HTML (string z Divi) czy nowy format Storybloka (obiekt)
+let renderedContent = "";
+if (typeof blok.tresc === 'string') {
+    renderedContent = blok.tresc; 
+} else if (blok.tresc) {
+    renderedContent = renderRichText(blok.tresc);
+}
+
+// Bezpieczne ładowanie zdjęcia
+const imageUrl = blok.image?.filename || "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1200&q=80";
+---
+
+<article {...storyblokEditable(blok)} class="pt-40 pb-24 bg-white relative">
+    
+    <!-- Guzik powrotu -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 mb-8">
+        <a href="/baza-wiedzy" class="inline-flex items-center text-slate-500 hover:text-[#F38160] font-bold transition-colors">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Wróć do bazy wiedzy
+        </a>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <!-- Header Artykułu -->
+        <div class="text-center mb-12">
+            {blok.category && (
+                <span class="inline-block py-1 px-3 rounded-full bg-[#fdeae5] text-[#e56742] font-bold text-xs tracking-wide mb-6 uppercase border border-[#fbc5b6]">
+                    {blok.category}
+                </span>
+            )}
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#0f172a] tracking-tight leading-[1.1] mb-6">
+                {blok.title || "Tytuł artykułu"}
+            </h1>
+            <p class="text-lg md:text-xl text-slate-500 font-medium max-w-3xl mx-auto leading-relaxed">
+                {blok.excerpt}
+            </p>
+        </div>
+
+        <!-- Główne zdjęcie -->
+        <div class="aspect-video rounded-[2.5rem] overflow-hidden shadow-xl border border-slate-100 mb-16 bg-slate-50">
+            <img src={imageUrl} alt={blok.title} class="w-full h-full object-cover" />
+        </div>
+
+        <!-- Główna Treść Artykułu z własnym formatowaniem CSS -->
+        <div class="prose-custom max-w-3xl mx-auto text-lg text-slate-700 leading-relaxed font-medium">
+            {renderedContent ? (
+                <Fragment set:html={renderedContent} />
+            ) : (
+                <div class="p-8 bg-amber-50 text-amber-800 rounded-2xl border border-amber-200 text-center font-bold">
+                    Treść artykułu jest pusta. Uzupełnij pole "tresc" w Storybloku.
+                </div>
+            )}
+        </div>
+
+    </div>
+
+    <!-- Sekcja CTA pod artykułem -->
+    <div class="max-w-3xl mx-auto px-4 mt-24">
+        <div class="bg-[#0f172a] p-10 rounded-[2rem] text-center shadow-xl relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-48 h-48 bg-[#F38160] rounded-full mix-blend-multiply filter blur-3xl opacity-40"></div>
+            <h4 class="text-3xl font-extrabold text-white mb-4 relative z-10">Czas na kolejny krok</h4>
+            <p class="text-slate-300 mb-8 relative z-10 font-medium">Nie wierz nam na słowo. Zobacz naszą unikalną metodykę w akcji podczas bezpłatnej lekcji pokazowej.</p>
+            <button onclick="window.toggleModal && window.toggleModal('contactModal')" class="relative z-10 px-8 py-4 bg-[#F38160] text-white font-bold rounded-xl hover:bg-[#e56742] transition-all shadow-lg hover:-translate-y-1">
+                Zarezerwuj darmową lekcję
+            </button>
+        </div>
+    </div>
+
+    <!-- Customowe CSS, które ładnie sformatuje tekst zwracany ze Storybloka -->
+    <style is:global>
+        .prose-custom p { margin-bottom: 1.5rem; }
+        .prose-custom h2 { font-size: 2.25rem; font-weight: 800; color: #0f172a; margin-top: 3.5rem; margin-bottom: 1.5rem; line-height: 1.2; letter-spacing: -0.025em; }
+        .prose-custom h3 { font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .prose-custom h4 { font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-top: 2rem; margin-bottom: 0.75rem; }
+        .prose-custom ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.5rem; }
+        .prose-custom ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1.5rem; }
+        .prose-custom li { margin-bottom: 0.75rem; padding-left: 0.25rem; }
+        .prose-custom a { color: #F38160; text-decoration: none; font-weight: 700; border-bottom: 2px solid transparent; transition: all 0.2s ease; }
+        .prose-custom a:hover { border-bottom-color: #F38160; }
+        .prose-custom strong { font-weight: 800; color: #0f172a; }
+        .prose-custom blockquote { border-left: 4px solid #F38160; padding-left: 1.5rem; font-style: italic; color: #475569; margin-top: 2rem; margin-bottom: 2rem; background: #f8fafc; padding: 1.5rem; border-radius: 0 1rem 1rem 0; }
+        .prose-custom img { border-radius: 1.5rem; margin-top: 2.5rem; margin-bottom: 2.5rem; border: 1px solid #f1f5f9; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); width: 100%; height: auto; }
+    </style>
+</article>

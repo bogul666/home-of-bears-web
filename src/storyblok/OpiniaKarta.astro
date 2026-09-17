@@ -1,0 +1,38 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+const { blok } = Astro.props;
+
+// Skrypt do dynamicznego generowania awatarów na podstawie imienia
+const avatarName = blok.imie ? blok.imie.replace(' ', '+') : "Anonim";
+const avatarUrl = `https://ui-avatars.com/api/?name=${avatarName}&background=random&color=fff&font-size=0.4`;
+---
+
+<div {...storyblokEditable(blok)} class="min-w-[300px] w-[85vw] sm:w-[400px] lg:w-auto flex-shrink-0 lg:flex-shrink snap-center bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full relative">
+    
+    <!-- Ikonka cytatu w tle -->
+    <i class="fa-solid fa-quote-right absolute top-8 right-8 text-5xl text-slate-50 opacity-50 pointer-events-none"></i>
+
+    <!-- Gwiazdki -->
+    <div class="flex text-yellow-400 text-sm mb-4 relative z-10">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+    </div>
+
+    <!-- Treść opinii -->
+    <p class="text-slate-700 leading-relaxed font-medium mb-8 flex-grow relative z-10 text-sm md:text-base">
+        "{blok.tresc}"
+    </p>
+
+    <!-- Autor -->
+    <div class="flex items-center gap-4 mt-auto pt-4 border-t border-slate-50 relative z-10">
+        <img src={avatarUrl} alt={blok.imie} class="w-12 h-12 rounded-full border border-slate-100 object-cover shadow-sm" />
+        <div>
+            <h4 class="font-bold text-[#0f172a] leading-tight">{blok.imie}</h4>
+            <span class="text-xs text-slate-500 font-medium">{blok.kiedy || "Niedawno"}</span>
+        </div>
+        
+        <!-- Ikonka "Verified from Google" (subtelna) -->
+        <div class="ml-auto">
+             <i class="fa-brands fa-google text-slate-300"></i>
+        </div>
+    </div>
+</div>

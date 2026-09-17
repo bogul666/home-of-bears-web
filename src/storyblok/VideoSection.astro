@@ -1,0 +1,150 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+const { blok } = Astro.props;
+
+// Pobieramy URL ze Storybloka
+const rawVideoUrl = blok.video_url?.url || "";
+// Generujemy unikalne ID dla modalu na wypadek, gdybyś użył tej sekcji kilka razy na stronie
+const modalId = `video-modal-${Math.random().toString(36).substring(7)}`;
+---
+
+<section {...storyblokEditable(blok)} class="py-16 md:py-24 bg-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl aspect-video md:aspect-[21/9] group bg-[#0f172a]">
+            <!-- Zdjęcie w tle ustawiane w Storybloku -->
+            <img 
+                src={blok.background_image?.filename || "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=2000&q=80"} 
+                alt="Obejrzyj Wideo" 
+                class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-40"
+            >
+            
+            <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10">
+                <!-- Przycisk Play wywołujący Modal -->
+                <button 
+                    data-video-trigger 
+                    data-video-url={rawVideoUrl} 
+                    data-modal-target={modalId}
+                    class="w-20 h-20 md:w-28 md:h-28 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all duration-300 hover:bg-[#F38160] hover:scale-110 hover:shadow-[0_0_60px_rgba(243,129,96,0.6)] cursor-pointer group/btn"
+                >
+                    <div class="w-14 h-14 md:w-20 md:h-20 bg-white rounded-full flex items-center justify-center transition-transform group-hover/btn:scale-95">
+                        <i class="fa-solid fa-play text-2xl md:text-3xl text-[#F38160] ml-1 md:ml-2"></i>
+                    </div>
+                </button>
+                
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight drop-shadow-lg">
+                    {blok.title || "Zanim zadzwonisz, obejrzyj wideo."}
+                </h2>
+                <p class="text-lg md:text-xl text-slate-100 font-medium max-w-2xl drop-shadow-md">
+                    {blok.subtitle || "Poznajmy się w 3 minuty. Odpowiadamy na najważniejsze pytania rodziców dotyczące naszej metodyki i braku ocen."}
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div id={modalId} class="video-modal fixed inset-0 z-[110] hidden items-center justify-center p-4 sm:p-6" aria-modal="true" role="dialog">
+        <!-- Tło przyciemniające -->
+        <div data-modal-close class="absolute inset-0 bg-slate-900/95 backdrop-blur-sm transition-opacity opacity-0 cursor-pointer duration-300"></div>
+        
+        <!-- Kontener z Iframe -->
+        <div class="modal-content-scale relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl z-10 transform transition-all duration-300 scale-95 opacity-0">
+            <!-- Przycisk zamykania -->
+            <button data-modal-close class="absolute top-4 right-4 z-20 w-10 h-10 bg-white/10 hover:bg-white/30 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white transition-colors cursor-pointer">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <!-- Iframe do wideo (src jest wstrzykiwane przez JS) -->
+            <iframe class="w-full h-full border-0" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Funkcja do konwersji standardowych linków YT/Vimeo na linki do odtwarzacza (embed) z autoodtwarzaniem
+    function getEmbedUrl(url) {
+        if (!url) return '';
+        
+        // YouTube (wyciąga ID i dodaje autoplay)
+        const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+        if (ytMatch && ytMatch[1]) {
+            return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0`;
+        }
+        
+        // Vimeo
+        const vimeoMatch = url.match(/vimeo\.com\/(?:.*#|.*\/videos\/)?([0-9]+)/);
+        if (vimeoMatch && vimeoMatch[1]) {
+            return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`;
+        }
+        
+        return url; // Jeśli to inny link, zwróć go bez zmian
+    }
+
+    // Obsługa zdarzeń dla komponentu Astro
+    // Ten skrypt uruchomi się raz, dopinając logikę do wszystkich przycisków wideo na stronie
+    document.addEventListener('DOMContentLoaded', () => {
+        const triggers = document.querySelectorAll('[data-video-trigger]');
+        
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const rawUrl = trigger.getAttribute('data-video-url');
+                const modalId = trigger.getAttribute('data-modal-target');
+                const modal = document.getElementById(modalId);
+                
+                if (modal) {
+                    const backdrop = modal.querySelector('.bg-slate-900\\/95');
+                    const content = modal.querySelector('.modal-content-scale');
+                    const iframe = modal.querySelector('iframe');
+                    
+                    // Wstaw URL z autoodtwarzaniem
+                    iframe.src = getEmbedUrl(rawUrl);
+                    
+                    // Pokaz modal (usuń hidden, dodaj flex)
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    document.body.style.overflow = 'hidden'; // Zablokuj scrollowanie strony
+                    
+                    // Odpal animacje po krótkim opóźnieniu dla płynności
+                    setTimeout(() => {
+                        backdrop.classList.remove('opacity-0');
+                        backdrop.classList.add('opacity-100');
+                        
+                        content.classList.remove('scale-95', 'opacity-0');
+                        content.classList.add('scale-100', 'opacity-100');
+                    }, 10);
+                }
+            });
+        });
+
+        // Obsługa zamykania modalu (krzyżyk lub kliknięcie w tło)
+        const closeButtons = document.querySelectorAll('[data-modal-close]');
+        
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Znajdź najbliższy modal, w którym znajduje się kliknięty element
+                const modal = e.target.closest('.video-modal');
+                
+                if (modal) {
+                    const backdrop = modal.querySelector('.bg-slate-900\\/95');
+                    const content = modal.querySelector('.modal-content-scale');
+                    const iframe = modal.querySelector('iframe');
+                    
+                    // Odwróć animacje
+                    backdrop.classList.remove('opacity-100');
+                    backdrop.classList.add('opacity-0');
+                    
+                    content.classList.remove('scale-100', 'opacity-100');
+                    content.classList.add('scale-95', 'opacity-0');
+                    
+                    // Poczekaj na koniec animacji, po czym ukryj modal i zresetuj wideo
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                        iframe.src = ''; // To zatrzymuje odtwarzanie wideo w tle
+                        document.body.style.overflow = ''; // Odblokuj scrollowanie
+                    }, 300);
+                }
+            });
+        });
+    });
+</script>

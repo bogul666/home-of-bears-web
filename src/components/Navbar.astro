@@ -1,0 +1,176 @@
+---
+const { blok } = Astro.props;
+---
+<nav class="fixed w-full z-50 top-0 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-100/50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-24">
+            
+            <!-- LOGO -->
+            <a href="/" class="flex-shrink-0 flex items-center group">
+                <img class="h-16 w-auto transition-transform duration-300 group-hover:scale-105" src="/logo_p.png" alt="Home of Bears">
+            </a>
+            
+            <!-- DESKTOP MENU (Widoczne od rozmiaru lg) -->
+            <div class="hidden lg:flex items-center space-x-8">
+                
+                {blok?.header_links?.map((linkItem) => {
+                    
+                    if (linkItem.component === 'menu_link') {
+                        const url = linkItem.url?.cached_url || linkItem.url?.url || '#';
+                        const finalUrl = url.startsWith('/') || url.startsWith('http') || url.startsWith('#') ? url : `/${url}`;
+                        return (
+                             <a href={finalUrl} class="flex items-center text-slate-600 hover:text-[#F38160] font-semibold transition-colors duration-200">
+                                {linkItem.icon && <span class="text-xl mr-2">{linkItem.icon}</span>}
+                                {linkItem.label}
+                             </a>
+                        );
+                    }
+                    
+                    if (linkItem.component === 'menu_dropdown') {
+                        return (
+                            <div class="relative group">
+                                <button class="flex items-center gap-1.5 text-slate-600 hover:text-[#F38160] font-semibold transition-colors py-2">
+                                    {linkItem.label} 
+                                    
+                                    <svg class="w-4 h-4 text-slate-400 group-hover:text-[#F38160] transition-transform duration-200 group-hover:-rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                    
+                                </button>
+                                
+                                <div class="absolute left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border border-slate-100 overflow-hidden transform origin-top-left scale-95 group-hover:scale-100 flex flex-col">
+                                    {linkItem.links?.map((subLink) => {
+                                        const subUrl = subLink.url?.cached_url || subLink.url?.url || '#';
+                                        const finalSubUrl = subUrl.startsWith('/') || subUrl.startsWith('http') || subUrl.startsWith('#') ? subUrl : `/${subUrl}`;
+                                        return (
+                                            <a href={finalSubUrl} class="flex items-center px-5 py-3 text-sm text-slate-600 hover:bg-[#fef5f3] hover:text-[#F38160] font-medium border-b border-slate-50 transition-colors">
+                                                {subLink.icon && <span class="text-xl mr-3">{subLink.icon}</span>}
+                                                {subLink.label}
+                                            </a>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    }
+                })}
+                
+                <div class="flex items-center gap-4 pl-4 border-l border-slate-200">
+                    <!-- PRZYCISK E-DZIENNIKA EDUSKY -->
+                    <a href="https://homeofteddy.edusky.pl/" target="_blank" rel="noopener noreferrer" class="font-bold text-[#0f172a] hover:text-blue-600 transition-colors duration-300 cursor-pointer flex items-center gap-2 group text-sm">
+                        <i class="fa-solid fa-user-lock text-slate-400 group-hover:text-blue-500 transition-colors"></i> E-dziennik
+                    </a>
+                    
+                    <button onclick="toggleModal('lekcjaModal')" class="font-bold text-[#0f172a] hover:text-[#F38160] transition-colors duration-300 cursor-pointer text-sm">
+                        Lekcja pokazowa
+                    </button>
+                    
+                    <button onclick="toggleModal('eduskyModal')" class="group relative px-6 py-3 font-bold text-white rounded-full bg-[#F38160] overflow-hidden shadow-md hover:shadow-[#F38160]/30 transition-all duration-300 hover:-translate-y-0.5 inline-block cursor-pointer">
+                        <span class="relative flex items-center gap-2 text-sm">
+                            Zapisz na kurs 
+                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- MOBILE PRZYCISKI I HAMBURGER -->
+            <div class="lg:hidden flex items-center gap-3">
+                 <a href="https://homeofteddy.edusky.pl/" target="_blank" rel="noopener noreferrer" class="text-blue-600 p-2 focus:outline-none bg-blue-50 rounded-full w-10 h-10 flex items-center justify-center border border-blue-100 shadow-sm">
+                    <i class="fa-solid fa-user-lock text-sm"></i>
+                </a>
+                
+                <button id="mobile-menu-toggle" class="text-[#0f172a] p-2 focus:outline-none bg-slate-100 rounded-full w-12 h-12 flex items-center justify-center hover:bg-slate-200 transition-colors shadow-sm">
+                    <!-- Ikona Hamburgera -->
+                    <i id="menu-icon-bars" class="fa-solid fa-bars text-xl"></i>
+                    <!-- Ikona X (ukryta domyślnie) -->
+                    <i id="menu-icon-x" class="fa-solid fa-xmark text-xl hidden"></i>
+                </button>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- ROZWIJANE MENU MOBILNE (Schowane domyślnie pod klasą 'hidden') -->
+    <div id="mobile-menu-panel" class="hidden lg:hidden absolute top-[96px] left-0 w-full bg-white border-b border-slate-200 shadow-2xl overflow-y-auto max-h-[calc(100vh-96px)] origin-top transition-all duration-300">
+        <div class="px-6 py-6 space-y-6">
+            
+            {blok?.header_links?.map((linkItem) => {
+                if (linkItem.component === 'menu_link') {
+                    const url = linkItem.url?.cached_url || linkItem.url?.url || '#';
+                    const finalUrl = url.startsWith('/') || url.startsWith('http') || url.startsWith('#') ? url : `/${url}`;
+                    return (
+                        <a href={finalUrl} class="block text-xl font-bold text-[#0f172a] hover:text-[#F38160] transition-colors">
+                            {linkItem.icon && <span class="mr-3">{linkItem.icon}</span>}
+                            {linkItem.label}
+                        </a>
+                    );
+                }
+                
+                if (linkItem.component === 'menu_dropdown') {
+                    return (
+                        <div class="space-y-3">
+                            <div class="text-xl font-bold text-[#0f172a] opacity-50 uppercase tracking-widest text-xs mb-2">
+                                {linkItem.label}
+                            </div>
+                            <div class="pl-4 border-l-2 border-[#fdeae5] space-y-4">
+                                {linkItem.links?.map((subLink) => {
+                                    const subUrl = subLink.url?.cached_url || subLink.url?.url || '#';
+                                    const finalSubUrl = subUrl.startsWith('/') || subUrl.startsWith('http') || subUrl.startsWith('#') ? subUrl : `/${subUrl}`;
+                                    return (
+                                        <a href={finalSubUrl} class="block text-lg font-bold text-slate-600 hover:text-[#F38160] transition-colors">
+                                            {subLink.icon && <span class="mr-2 text-xl">{subLink.icon}</span>}
+                                            {subLink.label}
+                                        </a>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    );
+                }
+            })}
+
+            <!-- GŁÓWNE PRZYCISKI W MENU MOBILNYM -->
+            <div class="pt-6 border-t border-slate-100 flex flex-col gap-4">
+                <button onclick="toggleModal('lekcjaModal'); document.getElementById('mobile-menu-toggle').click();" class="w-full py-4 text-center border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-[#F38160] hover:text-[#F38160] transition-colors text-lg">
+                    Darmowa Lekcja Pokazowa
+                </button>
+                <button onclick="toggleModal('eduskyModal'); document.getElementById('mobile-menu-toggle').click();" class="w-full py-4 text-center bg-[#F38160] text-white font-bold rounded-xl hover:bg-[#e56742] transition-colors shadow-md text-lg">
+                    Zapisz dziecko na kurs
+                </button>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<!-- SKRYPT DO OBSŁUGI ROZWIJANIA MENU MOBILNEGO -->
+<script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleBtn = document.getElementById('mobile-menu-toggle');
+        const mobilePanel = document.getElementById('mobile-menu-panel');
+        const iconBars = document.getElementById('menu-icon-bars');
+        const iconX = document.getElementById('menu-icon-x');
+
+        if (toggleBtn && mobilePanel) {
+            toggleBtn.addEventListener('click', () => {
+                // Przełączanie widoczności panelu
+                mobilePanel.classList.toggle('hidden');
+                
+                // Zmiana ikonki z burgera na krzyżyk
+                iconBars.classList.toggle('hidden');
+                iconX.classList.toggle('hidden');
+                
+                // Opcjonalnie zablokuj scrollowanie tła, gdy menu jest otwarte
+                if (!mobilePanel.classList.contains('hidden')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+    });
+</script>

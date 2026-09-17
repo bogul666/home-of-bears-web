@@ -1,0 +1,38 @@
+---
+---
+<div id="eduskyModal" class="hidden fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
+    <!-- Tło zaciemniające -->
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleModal('eduskyModal')"></div>
+
+    <!-- Panel okna (wycentrowany) -->
+    <div class="relative w-full max-w-4xl bg-white rounded-[2rem] shadow-2xl border border-slate-100 overflow-hidden z-10 max-h-[90vh] flex flex-col my-auto mx-auto">
+        
+        <button type="button" onclick="toggleModal('eduskyModal')" class="absolute top-4 right-4 sm:top-6 sm:right-6 z-50 text-slate-400 hover:text-slate-600 focus:outline-none bg-white rounded-full p-2 shadow-sm border border-slate-100 transition-colors cursor-pointer">
+            <span class="sr-only">Zamknij</span>
+            <i class="fa-solid fa-xmark text-2xl w-6 h-6 flex items-center justify-center"></i>
+        </button>
+
+        <div class="w-full h-full bg-slate-50 p-4 sm:p-8 pt-16 overflow-y-auto">
+            <!-- WIDŻET EDUSKY -->
+            <div id="edusky-externalform" data-formid="5" class="mx-auto"></div>
+            <script is:inline src="https://homeofteddy.edusky.pl/externalform/v2/js/script.js"></script>
+        </div>
+    </div>
+</div>
+
+<script is:inline>
+    window.toggleModal = function(modalID) {
+        const modal = document.getElementById(modalID);
+        if (!modal) return;
+        
+        if (modal.classList.contains('hidden')) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        } else {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+    };
+</script>

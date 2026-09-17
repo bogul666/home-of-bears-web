@@ -1,0 +1,97 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import LekcjaModal from '../../components/LekcjaModal.astro';
+import ZapisyModal from '../../components/ZapisyModal.astro';
+import '../../styles/global.css';
+
+// 1. Funkcja generująca ścieżki dla wszystkich artykułów
+export async function getStaticPaths() {
+  const storyblokApi = useStoryblokApi();
+  
+  // Pobieramy wpisy po TYPIE TREŚCI (artykul), ponieważ nie są w osobnym folderze
+  const { data } = await storyblokApi.get('cdn/stories', {
+    version: import.meta.env.DEV ? "draft" : "published",
+    content_type: 'artykul',
+    per_page: 100, // Pobiera do 100 artykułów na raz
+  });
+
+  return data.stories.map((story) => {
+    return {
+      params: { slug: story.slug }, // Zwracamy czysty slug z głównego folderu
+    };
+  });
+}
+
+// 2. Pobieranie danych konkretnego artykułu
+const { slug } = Astro.params;
+const storyblokApi = useStoryblokApi();
+
+let story;
+try {
+  // Szukamy bezpośrednio po slugu, bez sztucznego przedrostka "artykuly/"
+  const { data } = await storyblokApi.get(`cdn/stories/${slug}`, {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  story = data.story;
+} catch (error) {
+  console.error("Błąd ładowania artykułu:", error);
+}
+
+// 3. Pobieranie ustawień globalnych (Navbar)
+let globalSettings = {};
+try {
+  const { data } = await storyblokApi.get('cdn/stories/ustawienia/global', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  globalSettings = data.story;
+} catch (error) {}
+---
+
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{story?.content?.title || story?.name || 'Artykuł'} - Home of Bears</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-slate-800 bg-[#F8FAFC] antialiased overflow-x-hidden">
+
+    <Navbar blok={globalSettings?.content} />
+
+    {story ? (
+        <StoryblokComponent blok={story.content} />
+    ) : (
+        <div class="py-40 text-center px-4">
+            <div class="inline-block p-12 bg-white rounded-3xl shadow-sm border border-slate-100">
+                <i class="fa-solid fa-ghost text-6xl text-slate-300 mb-6 block"></i>
+                <h1 class="text-3xl font-bold text-[#0f172a] mb-4">Ups! Nie znaleziono artykułu.</h1>
+                <p class="text-slate-500 mb-8 font-medium">Być może uciekł do lasu. Sprawdź, czy adres jest poprawny lub wróć do Bazy Wiedzy.</p>
+                <a href="/baza_wiedzy" class="inline-block px-8 py-4 bg-[#F38160] text-white font-bold rounded-xl hover:bg-[#e56742] transition-colors">
+                    Wróć do bazy wiedzy
+                </a>
+            </div>
+        </div>
+    )}
+
+    <Footer />
+
+    <LekcjaModal />
+    <ZapisyModal />
+
+    <script is:inline>
+        window.toggleModal = function(modalID) {
+            const modal = document.getElementById(modalID);
+            if (modal) {
+                modal.classList.toggle('hidden');
+                modal.classList.toggle('flex');
+            }
+        };
+    </script>
+</body>
+</html>

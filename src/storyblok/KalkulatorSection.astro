@@ -1,0 +1,11 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+// W tym miejscu Astro "importuje" nasz zewnętrzny plik Reactowy!
+import PricingCalculator from '/src/components/PricingCalculator.jsx';
+const { blok } = Astro.props;
+---
+
+<div {...storyblokEditable(blok)}>
+    <!-- Dyrektywa client:load mówi Astro: "Uruchom JavaScript w tym komponencie natychmiast" -->
+    <PricingCalculator client:load title={blok.title} />
+</div>

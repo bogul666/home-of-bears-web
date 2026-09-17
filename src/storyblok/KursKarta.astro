@@ -1,0 +1,49 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+const { blok } = Astro.props;
+
+// Zabezpieczenie linku (Wyciągnięcie poprawnego URL ze Storybloka)
+// Jeśli link nie został podany, wstaw "#"
+const linkUrl = blok.link?.cached_url ? `/${blok.link.cached_url}` : "#";
+---
+
+<a href={linkUrl} {...storyblokEditable(blok)} class="block group h-full">
+    <div class="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full relative overflow-hidden transform hover:-translate-y-1">
+        
+        <!-- Delikatny, pomarańczowy gradient pojawiający się tylko przy najechaniu (hover) -->
+        <div class="absolute inset-0 bg-gradient-to-br from-[#fef5f3] to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col h-full">
+            
+            <!-- Ikonka (Wpisana jako Emoji w Storybloku, z radosną animacją na hover) -->
+            <div class="w-16 h-16 bg-[#fdeae5] rounded-2xl flex items-center justify-center text-4xl mb-6 shadow-sm border border-[#fbc5b6] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                {blok.icon || "🐼"}
+            </div>
+            
+            <!-- Wiek -->
+            <span class="text-[#F38160] text-sm font-extrabold uppercase tracking-widest mb-2 block">
+                {blok.wiek || "Wiek: ?"}
+            </span>
+            
+            <!-- Nazwa Kursu -->
+            <h4 class="text-2xl font-black text-[#0f172a] mb-3 leading-tight group-hover:text-[#F38160] transition-colors">
+                {blok.nazwa || "Nazwa Kursu"}
+            </h4>
+            
+            <!-- Opis -->
+            <p class="text-slate-600 text-sm leading-relaxed mb-8 flex-grow font-medium">
+                {blok.opis || "Krótki opis tego kursu pojawi się tutaj po dodaniu go w panelu Storyblok."}
+            </p>
+            
+            <!-- Dolny pasek z ikoną strzałki FontAwesome -->
+            <div class="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span class="text-sm font-bold text-slate-400 group-hover:text-[#F38160] transition-colors">Poznaj szczegóły</span>
+                <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-[#F38160] group-hover:text-white transition-all">
+                    <!-- Ikona wymaga załadowanego na stronie pliku z FontAwesome -->
+                    <i class="fa-solid fa-arrow-right text-sm transform group-hover:translate-x-0.5"></i>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</a>

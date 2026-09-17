@@ -1,0 +1,283 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import PricingCalculator from '../components/PricingCalculator.jsx';
+import ZapisyModal from '../components/ZapisyModal.astro'; 
+import LekcjaModal from '../components/LekcjaModal.astro'; 
+import '../styles/global.css';
+
+const storyblokApi = useStoryblokApi();
+let globalSettings = {};
+try {
+  const { data } = await storyblokApi.get('cdn/stories/ustawienia/global', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  globalSettings = data.story;
+} catch (error) {
+  console.log("Używam domyślnego navbara, nie znaleziono ustawień globalnych");
+}
+---
+
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kursy Pandas (3-6 lat) - Home of Bears</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-slate-800 bg-[#FCFAF5] antialiased overflow-x-hidden">
+
+    <Navbar blok={globalSettings?.content} />
+
+    <!-- HERO SECTION -->
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-white border-b border-slate-100">
+        <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#fdeae5] rounded-full mix-blend-multiply filter blur-[80px] -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-blue-50 rounded-full mix-blend-multiply filter blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#fef5f3] border border-[#fbc5b6] text-[#e56742] font-bold text-sm mb-6 shadow-sm uppercase tracking-wider">
+                        🐼 Kursy Pandas | Grupa Wiekowa: 3-6 lat
+                    </div>
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-[#0f172a] tracking-tight leading-[1.1] mb-6">
+                        Angielski, który Twoje dziecko <span class="text-[#F38160]">pokocha od pierwszej minuty.</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed font-medium">
+                        Koniec ze zmuszaniem do siedzenia w ławkach. Kursy Pandas to 100% zajęć na dywanie, dużo ruchu, empatia (NVC) i zanurzenie w języku, które buduje <strong>prawdziwą pewność siebie</strong> u przedszkolaka.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button onclick="toggleModal('lekcjaModal')" class="px-8 py-4 bg-[#F38160] text-white font-bold rounded-xl hover:bg-[#e56742] transition-all shadow-md text-center cursor-pointer">
+                            Zarezerwuj darmową lekcję
+                        </button>
+                        <a href="#cennik" class="px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-[#F38160] hover:text-[#F38160] transition-all text-center">
+                            Sprawdź cennik
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="dzieci_na_dywanie.png" alt="Dzieci bawiące się i uczące na dywanie" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1544717297-fa95b6ee9643?auto=format&fit=crop&w=800&q=80'">
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl z-20 border border-slate-100 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl font-bold">90%</div>
+                        <div>
+                            <p class="font-bold text-[#0f172a] text-sm">Zanurzenie w języku</p>
+                            <p class="text-xs text-slate-500">Mówimy po angielsku</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <section id="metoda" class="py-24 bg-[#FCFAF5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Twarde Fakty</h2>
+                <h3 class="text-4xl font-extrabold text-[#0f172a] leading-tight mb-6">Jak wyglądają zajęcia dla 3-latka?</h3>
+                <p class="text-lg text-slate-600 font-medium">Wiemy, że uwaga przedszkolaka jest płynna i szybko ulega rozproszeniu. Dlatego odrzuciliśmy tradycyjny system szkolny.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-[#fdeae5] text-[#F38160] rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-child-reaching"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">100% Dywanowe</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Siedzenie w ławkach zabija entuzjazm. Dzieci pracują z lektorką siedząc w kółku, w całkowicie swobodnej przestrzeni.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-stopwatch"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">1x 40 min lub 2x 30 min</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Idealny czas dostosowany do okien koncentracji małego dziecka. Wybierz dogodną dla Was częstotliwość bez obaw o przebodźcowanie.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-green-50 text-green-500 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-earth-europe"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">90% Angielskiego</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Język polski to tylko 10% – używany wyłącznie do koniecznych tłumaczeń, by dziecko w pełni rozumiało sens słów.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-purple-50 text-purple-500 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-brain"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">Mózg na "TAK"</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Nie używamy kar, nagród, ani porównań. Błąd to dla nas informacja, nie powód do stresu. Uczymy w pełnej akceptacji.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ZAAKCENTOWANA SEKCJA EDUKACYJNA -->
+    <section class="py-24 bg-white border-t border-slate-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div class="order-2 lg:order-1 relative">
+                    <!-- Tło dla ikonek (Opcjonalne uatrakcyjnienie) -->
+                    <div class="absolute -inset-4 bg-[#FCFAF5] rounded-[3rem] -z-10 transform -rotate-1"></div>
+                    
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Program bez podręczników</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] leading-tight mb-6">Uczymy się całym ciałem i zmysłami</h3>
+                    <p class="text-slate-600 font-medium leading-relaxed mb-8 text-lg">
+                        Na etapie przedszkolnym odkładamy na bok czytanie i pisanie. To czas, kiedy umysł dziecka jest najbardziej plastyczny na dźwięki. Skupiamy się na <strong>rozumieniu ze słuchu i wymowie</strong>.
+                    </p>
+
+                    <div class="space-y-8">
+                        <div class="flex gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-white border border-[#fbc5b6] text-[#F38160] shadow-sm flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fa-solid fa-music text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-[#0f172a] mb-2">Piosenki i rymowanki z ruchem</h4>
+                                <p class="text-slate-600 leading-relaxed font-medium">Wykorzystujemy materiały audio. Dzieci osłuchują się z melodią języka, nieświadomie zapamiętując całe struktury poprzez metodę reagowania ciałem (TPR).</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-white border border-blue-200 text-blue-500 shadow-sm flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fa-solid fa-shapes text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-[#0f172a] mb-2">Sensoryka i "Gadżety"</h4>
+                                <p class="text-slate-600 leading-relaxed font-medium">Zamiast patrzeć w płaską książkę, dajemy maluchom prawdziwe przedmioty, maskotki i zabawki zręcznościowe. Uczymy się angielskiego przez dotyk i doświadczanie.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-white border border-green-200 text-green-500 shadow-sm flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fa-solid fa-face-smile text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-[#0f172a] mb-2">Trening emocjonalny (NVC)</h4>
+                                <p class="text-slate-600 leading-relaxed font-medium">Nazywamy i oswajamy emocje. Pozwalamy na nieśmiałość i bunt, wykorzystując minimediacje SNO. Dziecko czuje się bezpiecznie, co redukuje stres przed mówieniem.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-1 lg:order-2">
+                    <div class="aspect-square md:aspect-[4/5] rounded-[3rem] overflow-hidden shadow-xl relative border-8 border-white">
+                        <img src="dzieci_angielski.png" alt="Materiały sensoryczne" class="w-full h-full object-cover">
+                        <!-- Nakładka z misiem (opcjonalny detal) -->
+                        <div class="absolute bottom-6 right-6 w-24 h-24 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-slate-100 p-2 transform rotate-12 hover:rotate-0 transition-transform">
+                            <img src="/panda.png" alt="Panda Mascot" class="w-full h-full object-contain" onerror="this.style.display='none'; this.parentNode.innerHTML='<i class=\'fa-solid fa-star text-3xl text-yellow-400\'></i>'">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-[#0f172a] relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-[#F38160] rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Współpraca z Domem</h2>
+            <h3 class="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-8">Jesteś ważną częścią tego procesu</h3>
+            <p class="text-lg text-slate-300 max-w-2xl mx-auto font-medium mb-16">
+                Brak podręczników do wypełniania w domu nie oznacza, że nie wiesz, co się dzieje. Skonstruowaliśmy system, dzięki któremu jesteś zawsze na bieżąco z postępami.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-[2rem] hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-[#F38160] text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm"><i class="fa-solid fa-comment-dots"></i></div>
+                    <h4 class="text-white font-bold text-xl mb-3">Opisowy Feedback</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium">Brak ocen cyfrowych rekompensujemy opisową, systematyczną informacją zwrotną. Po cyklach zajęć dokładnie wiesz, jak rozwija się pewność siebie i zasób słów malucha.</p>
+                </div>
+                <!-- Przebudowany klocek z E-dziennikiem EduSky z Linkiem -->
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-[2rem] hover:-translate-y-1 transition-transform relative overflow-hidden flex flex-col">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full mix-blend-overlay filter blur-3xl opacity-50"></div>
+                    <div class="w-14 h-14 bg-blue-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm relative z-10"><i class="fa-solid fa-mobile-screen"></i></div>
+                    <h4 class="text-white font-bold text-xl mb-3 relative z-10">Strefa Rodzica eduSky</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium relative z-10 flex-grow">Otrzymujesz dostęp do panelu, gdzie w jednym miejscu widzisz: frekwencję, harmonogram spotkań, płatności oraz wiadomości od lektora.</p>
+                    <a href="https://homeofteddy.edusky.pl/" target="_blank" rel="noopener noreferrer" class="mt-6 text-white font-bold border-b border-blue-400 pb-1 hover:text-blue-300 self-start transition-colors relative z-10">
+                        Zaloguj się do e-dziennika &rarr;
+                    </a>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-[2rem] hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-green-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm"><i class="fa-solid fa-door-open"></i></div>
+                    <h4 class="text-white font-bold text-xl mb-3">Adaptacja w Twoim tempie</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium">Zrozumienie potrzeb to podstawa NVC. Jeśli maluch na początku boi się zostać sam w sali, rodzic może mu towarzyszyć, dopóki dziecko nie poczuje się w 100% bezpiecznie z grupą.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEKCJA FAQ -->
+    <section class="py-24 bg-[#F8FAFC] border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Nic do ukrycia</h2>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] leading-tight">Szczere odpowiedzi na pytania rodziców</h3>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="text-lg font-bold text-[#0f172a] mb-3 flex items-start gap-3">
+                        <span class="text-[#F38160]">Q:</span> Czy rodzic może być obecny na zajęciach?
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-sm font-medium">Tak. Wprowadzamy dzieci stopniowo i rozumiemy potrzebę bezpieczeństwa. Rodzice mogą towarzyszyć maluchom na samym początku, aż te poczują się pewnie z nową grupą i lektorem.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="text-lg font-bold text-[#0f172a] mb-3 flex items-start gap-3">
+                        <span class="text-[#F38160]">Q:</span> Czy dziecko coś "wyniesie", jeśli jeszcze nie mówi po polsku?
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-sm font-medium">Tak – i to bardzo dużo! Mózg dziecka chłonie dźwięki i struktury językowe. To tzw. faza cichego okresu, która jest absolutnie naturalna i buduje solidne podstawy do mówienia w przyszłości.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="text-lg font-bold text-[#0f172a] mb-3 flex items-start gap-3">
+                        <span class="text-[#F38160]">Q:</span> Czy dzieci muszą znać już angielski, by zacząć?
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-sm font-medium">Absolutnie nie. Zajęcia Pandas są stworzone z myślą o dzieciach, które dopiero osłuchują się z językiem. Każdy startuje z czystą kartą i w swoim własnym tempie.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KALKULATOR CEN (Z Reacta) -->
+    <PricingCalculator client:load title="Inwestycja w program Pandas" />
+
+    <Footer />
+    
+    <LekcjaModal />
+    <ZapisyModal />
+
+    <!-- Skrypt do Modali -->
+    <script is:inline>
+        window.toggleModal = function(modalID) {
+            const modal = document.getElementById(modalID);
+            if(!modal) return;
+            
+            const backdrop = modal.querySelector('.modal-backdrop');
+            const panel = modal.querySelector('.modal-panel');
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; 
+                backdrop?.classList.add('opacity-100');
+                backdrop?.classList.remove('opacity-0');
+                panel?.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                document.body.style.overflow = 'hidden';
+            } else {
+                backdrop?.classList.remove('opacity-100');
+                backdrop?.classList.add('opacity-0');
+                panel?.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
+
+const { blok } = Astro.props;
+---
+
+<section {...storyblokEditable(blok)} id="kursy" class="py-24 bg-white relative overflow-hidden">
+    <!-- Subtelne dekoracje w tle (Blobs) -->
+    <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#fdeae5] rounded-full mix-blend-multiply filter blur-[100px] opacity-40 translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-blue-50 rounded-full mix-blend-multiply filter blur-[80px] opacity-60 -translate-x-1/2 translate-y-1/2"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <!-- Nagłówek Sekcji -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">
+                {blok.subtitle || "Ścieżka Niedźwiadka"}
+            </h2>
+            <h3 class="text-4xl md:text-5xl font-extrabold text-[#0f172a] leading-tight mb-6">
+                {blok.title || "Wybierz kurs dopasowany do wieku"}
+            </h3>
+            <p class="text-xl text-slate-600">
+                {blok.description || "Od pierwszych słów przedszkolaka po pewność siebie maturzysty. Poznaj naszą pełną ścieżkę edukacyjną."}
+            </p>
+        </div>
+
+        <!-- Grid (Siatka) dla kart kursów -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {
+                // Wyciągamy zagnieżdżone klocki 'kurs_karta' ze Storybloka
+                blok.kursy?.map((karta_kursu) => {
+                    return <StoryblokComponent blok={karta_kursu} />
+                })
+            }
+            
+            <!-- Wiadomość techniczna, jeśli nie dodano jeszcze kursów w CMS -->
+            {(!blok.kursy || blok.kursy.length === 0) && (
+                <div class="col-span-1 md:col-span-2 lg:col-span-4 text-center p-12 border-2 border-dashed border-slate-300 rounded-3xl text-slate-500 font-medium bg-slate-50">
+                    Brak przypisanych kursów. Dodaj bloki "kurs_karta" w Storybloku w polu "kursy".
+                </div>
+            )}
+        </div>
+
+    </div>
+</section>

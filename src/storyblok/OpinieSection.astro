@@ -1,0 +1,82 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
+
+const { blok } = Astro.props;
+---
+
+<section {...storyblokEditable(blok)} id="opinie" class="py-24 bg-[#F8FAFC] border-t border-slate-100 overflow-hidden relative">
+    
+    <!-- Dekoracyjne "Bloby" w tle -->
+    <div class="absolute -left-32 top-20 w-96 h-96 bg-[#fdeae5] rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+    <div class="absolute -right-32 bottom-20 w-96 h-96 bg-[#DBEAFE] rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+
+    <!-- PANDA Z LEWEJ STRONY (Jako subtelny znak wodny) -->
+    <div class="absolute top-10 left-[-5%] lg:left-[5%] w-32 md:w-48 opacity-20 pointer-events-none -rotate-12 z-0">
+        <img src="/panda.png" alt="Panda dekoracyjna" class="w-full h-full object-contain filter grayscale mix-blend-multiply" />
+    </div>
+
+    <!-- POLAR Z PRAWEJ STRONY (Jako subtelny znak wodny) -->
+    <div class="absolute bottom-10 right-[-5%] lg:right-[5%] w-40 md:w-56 opacity-20 pointer-events-none rotate-12 z-0">
+        <img src="/polar.png" alt="Niedźwiedź polarny dekoracyjny" class="w-full h-full object-contain filter grayscale mix-blend-multiply" />
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div class="max-w-2xl">
+                <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">
+                    {blok.subtitle || "Dowód Społeczny"}
+                </h2>
+                <h3 class="text-4xl md:text-5xl font-extrabold text-[#0f172a] leading-tight">
+                    {blok.title || "Co mówią o nas rodzice?"}
+                </h3>
+            </div>
+            
+            <!-- Podsumowanie oceny z Google -->
+            <div class="flex items-center gap-4 bg-white px-6 py-4 rounded-2xl shadow-sm border border-slate-100">
+                <div class="w-12 h-12 flex items-center justify-center bg-slate-50 rounded-full border border-slate-100 shadow-sm overflow-hidden">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" class="w-6 h-6 object-contain" />
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl font-black text-[#0f172a] leading-none">4.8</span>
+                        <div class="flex text-yellow-400 text-sm">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block mt-1">Ocena Google Gliwice/Żory</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Karuzela / Grid opinii -->
+        <!-- Na mobile horyzontalny scroll, na desktopie klasyczny grid 3-kolumnowy -->
+        <div class="flex overflow-x-auto pb-8 -mx-4 px-4 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-3 gap-6 snap-x snap-mandatory hide-scrollbar">
+            
+            {
+                blok.opinie_karty?.map((karta) => {
+                    return <StoryblokComponent blok={karta} />
+                })
+            }
+
+            {(!blok.opinie_karty || blok.opinie_karty.length === 0) && (
+                <div class="col-span-3 text-center p-12 border-2 border-dashed border-slate-300 rounded-3xl text-slate-500 font-medium">
+                    Sekcja opinii jest pusta. Dodaj karty opinii w panelu Storyblok do pola "opinie_karty".
+                </div>
+            )}
+
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Klasa do ukrycia paska scrollowania, ale z zachowaniem funkcjonalności na mobile */
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>

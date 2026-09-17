@@ -1,0 +1,221 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+const { blok } = Astro.props;
+
+const defaultHeadline = "Angielski bez ocen i stresu.";
+const headlineText = blok.headline || defaultHeadline;
+const words = headlineText.split(' ');
+const firstWord = words[0]; 
+const restOfWords = words.slice(1).join(' '); 
+---
+
+<section {...storyblokEditable(blok)} class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-[85vh] flex items-center bg-[#FCFAF5]">
+    
+    <!-- Ocieplone Bloby -->
+    <div class="absolute top-0 -left-4 w-72 h-72 bg-[#fdeae5] rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+    <div class="absolute top-0 -right-4 w-72 h-72 bg-[#FEF3C7] rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" style="animation-delay: 2s;"></div>
+    <div class="absolute -bottom-8 left-20 w-72 h-72 bg-[#FCE7F3] rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" style="animation-delay: 4s;"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            
+            <div class="lg:col-span-7">
+                <!-- Powiadomienie (Badge) -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#fef5f3] border border-[#fbc5b6] text-[#e56742] font-semibold text-sm mb-6 shadow-sm">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#f69f86] opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-[#F38160]"></span>
+                    </span>
+                    {blok.badge_text || "Gliwice & Żory: Zapisy na rok 2026 otwarte"}
+                </div>
+                
+                <h1 class="text-5xl md:text-6xl lg:text-[5rem] font-extrabold tracking-tight leading-[1.05] mb-6">
+                    <span class="text-[#0f172a] block mb-2">{firstWord}</span>
+                    <span class="text-[#F38160] block">{restOfWords}</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl leading-relaxed font-medium">
+                    {blok.subheadline || "Przełamujemy bariery językowe przez empatię (NVC) i ruch. Jesteśmy miejscem, w którym Twoje dziecko uwierzy w swoje możliwości."}
+                </p>
+
+                <!-- DWA GŁÓWNE PRZYCISKI AKCJI (Na komputerach obok siebie, na komórkach pod sobą) -->
+                <div class="flex flex-col sm:flex-row gap-4 mb-10">
+                    <!-- Zapis właściwy (CRM) -->
+                    <button onclick="toggleModal('eduskyModal')" class="px-8 py-4 bg-[#0f172a] text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-md text-center flex justify-center items-center gap-2 group cursor-pointer border-2 border-[#0f172a]">
+                        Zapisz dziecko na kurs <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 text-[#F38160]"></i>
+                    </button>
+                    
+                    <!-- Lekcja próbna (Web3Forms) - mniej inwazyjny wygląd -->
+                    <button onclick="toggleModal('lekcjaModal')" class="px-8 py-4 bg-white/50 backdrop-blur-sm border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-white hover:border-[#F38160] hover:text-[#F38160] transition-all text-center cursor-pointer shadow-sm">
+                        Zarezerwuj darmową lekcję
+                    </button>
+                </div>
+
+                <!-- SEKCJA OPINII (Inicjały + Wyniki z Google/FB) -->
+                <div class="flex flex-col sm:flex-row flex-wrap gap-6 items-start sm:items-center">
+                    <div class="flex -space-x-4">
+                        <!-- Zamienione z <img> na <div> - niezawodne inicjały w HTML/CSS -->
+                        <div class="w-12 h-12 rounded-full border-4 border-[#FCFAF5] shadow-sm bg-[#F38160] text-white flex items-center justify-center font-bold text-lg">MK</div>
+                        <div class="w-12 h-12 rounded-full border-4 border-[#FCFAF5] shadow-sm bg-[#0f172a] text-white flex items-center justify-center font-bold text-lg">HW</div>
+                        <div class="w-12 h-12 rounded-full border-4 border-[#FCFAF5] shadow-sm bg-[#1877F2] text-white flex items-center justify-center font-bold text-lg">AŻ</div>
+                        <div class="w-12 h-12 rounded-full border-4 border-[#FCFAF5] bg-slate-200 flex items-center justify-center text-sm font-bold text-slate-700 shadow-sm">+50</div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-1 text-sm font-medium text-slate-600">
+                        <div class="flex items-center gap-2">
+                            <div class="flex text-yellow-400 text-sm">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <span><span class="text-[#0f172a] font-extrabold">4.8/5</span> wg. opinii Google</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="flex text-[#1877F2] text-sm">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <span><span class="text-[#0f172a] font-extrabold">5.0/5</span> wg. opinii Facebook</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAYA Self-Selection Tool z Misiami! -->
+            <div class="lg:col-span-5 w-full mt-20 lg:mt-0">
+                <div class="bg-white/80 backdrop-blur-md border border-white/60 rounded-[2rem] p-8 shadow-xl relative overflow-visible z-20">
+                    
+                    <div class="absolute -top-24 -right-24 w-48 h-48 bg-[#F38160] rounded-full mix-blend-multiply filter blur-3xl opacity-20 -z-10"></div>
+                    
+                    <!-- ZBIORNIK NA MISIA -->
+                    <div id="bear-mascot-container" class="absolute -top-24 right-4 w-32 h-32 opacity-0 transform translate-y-10 transition-all duration-500 ease-out z-30 pointer-events-none drop-shadow-xl">
+                        <img id="bear-mascot-image" src="" alt="Miś Home of Bears" class="w-full h-full object-contain drop-shadow-lg scale-110 origin-bottom" />
+                    </div>
+
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-bold text-[#0f172a] mb-2">Znajdź kurs dla dziecka</h3>
+                        <p class="text-slate-500 mb-6 text-sm">Wybierz wiek, aby poznać program i <strong>transparentne koszty</strong> (0 ukrytych opłat).</p>
+                        
+                        <form id="hero-taya-form" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Wiek dziecka</label>
+                                <div class="relative">
+                                    <select id="hero-age-select" required class="w-full bg-white/90 border border-slate-200 text-slate-800 rounded-xl px-4 py-4 appearance-none focus:outline-none focus:ring-2 focus:ring-[#F38160] focus:border-transparent transition-all cursor-pointer font-medium shadow-sm z-20 relative">
+                                        <option value="" disabled selected>Wybierz grupę wiekową...</option>
+                                        <option value="pandas">3 - 6 lat (Pandas)</option>
+                                        <option value="grizzly_cubs">7 - 9 lat (Grizzly Cubs)</option>
+                                        <option value="youngsters">10 - 12 lat (Grizzly Youngsters)</option>
+                                        <option value="polars">13+ lat (Polars)</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400 z-30">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-[#0f172a] text-white font-bold py-4 rounded-xl hover:bg-slate-800 transition-colors duration-300 shadow-md flex justify-center items-center gap-2 group relative z-20 cursor-pointer">
+                                Sprawdź Ofertę 
+                                <svg class="w-4 h-4 text-[#F38160] transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </form>
+
+                        <div id="hero-result-box" class="hidden mt-6 p-5 bg-[#fef5f3] border border-[#fbc5b6] rounded-xl text-center transition-all opacity-0 relative z-20">
+                            <span id="hero-result-badge" class="inline-block px-3 py-1 bg-white text-[#e56742] rounded-lg text-xs font-bold mb-3 uppercase tracking-wide shadow-sm border border-[#fdeae5]">
+                                Dopasowano: ...
+                            </span>
+                            <p class="text-[#0f172a] font-bold text-lg mb-1">Inwestycja: od <span id="hero-result-price" class="text-2xl text-[#F38160] font-black">--</span> zł / mies.</p>
+                            <p class="text-xs text-slate-500 mb-4">(najniższa rata przy opcji 1x w tyg)</p>
+                            
+                            <a href="#cennik" class="text-sm font-bold text-[#F38160] hover:text-[#e56742] inline-flex items-center justify-center gap-1 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-100 transition-all hover:shadow-md">
+                                Skonfiguruj w Kalkulatorze 
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<script is:inline>
+    // Używamy eventu DOMContentLoaded, ale z is:inline by uniknąć problemów przy przejściach widoków Astro
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('hero-taya-form');
+        const select = document.getElementById('hero-age-select');
+        const resultBox = document.getElementById('hero-result-box');
+        const resultBadge = document.getElementById('hero-result-badge');
+        const resultPrice = document.getElementById('hero-result-price');
+        
+        const bearContainer = document.getElementById('bear-mascot-container');
+        const bearImage = document.getElementById('bear-mascot-image');
+
+        if (form && select) {
+            
+            select.addEventListener('change', () => {
+                const val = select.value;
+                if (!val) return;
+                
+                bearContainer.classList.remove('opacity-100', 'translate-y-0');
+                bearContainer.classList.add('opacity-0', 'translate-y-10');
+                
+                setTimeout(() => {
+                    switch(val) {
+                        case 'pandas':
+                            bearImage.src = "/panda.png"; 
+                            break;
+                        case 'grizzly_cubs':
+                            bearImage.src = "/grizzly_cubs.png";
+                            break;
+                        case 'youngsters':
+                            bearImage.src = "/grizzly_youngster.png";
+                            break;
+                        case 'polars':
+                            bearImage.src = "/polar.png";
+                            break;
+                    }
+                    
+                    bearContainer.classList.remove('hidden', 'opacity-0', 'translate-y-10');
+                    bearContainer.classList.add('opacity-100', 'translate-y-0');
+                    
+                }, 300); 
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const val = select.value;
+                if (!val) return;
+
+                let courseName = "";
+                let price = "";
+
+                switch(val) {
+                    case 'pandas':
+                        courseName = "Pandas (3-6 lat)";
+                        price = "220,50"; 
+                        break;
+                    case 'grizzly_cubs':
+                        courseName = "Grizzly Cubs (7-9 lat)";
+                        price = "311,00"; 
+                        break;
+                    case 'youngsters':
+                        courseName = "Youngsters (10-12 lat)";
+                        price = "311,00"; 
+                        break;
+                    case 'polars':
+                        courseName = "Polars (Młodzież)";
+                        price = "333,00"; 
+                        break;
+                }
+
+                resultBadge.textContent = `Dopasowano: ${courseName}`;
+                resultPrice.textContent = price;
+                
+                resultBox.classList.remove('hidden');
+                setTimeout(() => {
+                    resultBox.classList.remove('opacity-0');
+                    resultBox.classList.add('opacity-100');
+                }, 50);
+            });
+        }
+    });
+</script>

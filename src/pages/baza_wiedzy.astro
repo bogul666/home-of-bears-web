@@ -1,0 +1,92 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import Wyszukiwarka from '../components/Wyszukiwarka.jsx';
+import LekcjaModal from '../components/LekcjaModal.astro';
+import ZapisyModal from '../components/ZapisyModal.astro';
+import '../styles/global.css';
+
+// Inicjalizacja API Storybloka
+const storyblokApi = useStoryblokApi();
+
+// Pobieranie wszystkich wpisów typu "artykul" niezależnie od folderu
+let articles = [];
+try {
+  const { data } = await storyblokApi.get('cdn/stories', {
+    version: import.meta.env.DEV ? "draft" : "published",
+    content_type: 'artykul', // Szukamy po typie treści zamiast po folderze
+    is_startpage: 0,
+    sort_by: 'first_published_at:desc', 
+  });
+  articles = data.stories;
+} catch (error) {
+  console.error("Błąd podczas pobierania bazy wiedzy:", error);
+}
+
+// Globalne ustawienia do przekazania Navbarowi
+let globalSettings = {};
+try {
+  const { data } = await storyblokApi.get('cdn/stories/ustawienia/global', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  globalSettings = data.story;
+} catch (error) {
+  console.log("Nie znaleziono globalnych ustawień");
+}
+---
+
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Centrum Wiedzy - Home of Bears</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-slate-800 bg-[#F8FAFC] antialiased overflow-x-hidden">
+
+    <Navbar blok={globalSettings.content} />
+
+    <!-- SEKCJA HERO DLA BAZY WIEDZY (Część statyczna) -->
+    <header class="pt-40 pb-16 lg:pt-48 bg-white relative overflow-hidden">
+        <!-- Dekoracyjne tło -->
+        <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#fdeae5] rounded-full mix-blend-multiply filter blur-[80px] -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-blue-50 rounded-full mix-blend-multiply filter blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-[#fdeae5] text-[#e56742] font-bold text-sm tracking-wide mb-6 uppercase border border-[#fbc5b6]">
+                Szczere Odpowiedzi
+            </span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#0f172a] tracking-tight leading-[1.1] mb-6">
+                Nie mamy przed Tobą <br><span class="text-[#F38160]">żadnych tajemnic.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-600 mb-6 leading-relaxed max-w-2xl mx-auto font-medium">
+                Wybór szkoły to trudna decyzja. Przygotowaliśmy dziesiątki artykułów, które odpowiedzą na Twoje największe obawy. Czego szukasz?
+            </p>
+        </div>
+    </header>
+
+    <!-- MAGICZNA CZĘŚĆ INTERAKTYWNA (React) -->
+    <!-- Przekazujemy wszystkie artykuły do naszego komponentu wyszukiwarki -->
+    <Wyszukiwarka client:load articles={articles} />
+
+    <Footer />
+    
+    <LekcjaModal />
+    <ZapisyModal />
+
+    <script is:inline>
+        window.toggleModal = function(modalID) {
+            const modal = document.getElementById(modalID);
+            if (modal) {
+                modal.classList.toggle('hidden');
+                modal.classList.toggle('flex');
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import ZapisyModal from '../components/ZapisyModal.astro'; 
+import LekcjaModal from '../components/LekcjaModal.astro'; 
+import '../styles/global.css';
+
+const storyblokApi = useStoryblokApi();
+let globalSettings = {};
+try {
+  const { data } = await storyblokApi.get('cdn/stories/ustawienia/global', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  globalSettings = data.story;
+} catch (error) {
+  console.log("Używam domyślnego navbara, nie znaleziono ustawień globalnych");
+}
+---
+
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fundamenty Edukacji - Home of Bears</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-slate-800 bg-[#F8FAFC] antialiased overflow-x-hidden">
+
+    <Navbar blok={globalSettings?.content} />
+
+    <!-- HERO SECTION -->
+    <header class="relative pt-40 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-white border-b border-slate-100">
+        <!-- Dekoracyjne tło nawiązujące do solidnych podstaw (ziemia, natura) -->
+        <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-emerald-50 rounded-full mix-blend-multiply filter blur-[80px] -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-amber-50 rounded-full mix-blend-multiply filter blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <span class="inline-block py-1 px-3 rounded-full bg-[#fdeae5] text-[#e56742] font-bold text-sm tracking-wide mb-6 uppercase border border-[#fbc5b6]">
+                    Filozofia Home of Bears
+                </span>
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#0f172a] tracking-tight leading-[1.1] mb-8">
+                    Budujemy na tym, <br><span class="text-[#F38160]">co wewnątrz.</span>
+                </h1>
+                <p class="text-xl text-slate-600 mb-10 leading-relaxed font-medium">
+                    Metody i techniki nauczania to tylko wierzchołek góry lodowej. Żaden podręcznik nie zadziała, jeśli uczeń nie czuje się bezpiecznie. Poznaj 4 filary, na których opiera się nasza szkoła.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filar 1: NVC -->
+    <section class="py-24 bg-[#F8FAFC] overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative order-2 lg:order-1">
+                    <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="https://a.storyblok.com/f/295239851056156/2048x1365/9209c1258e/angielski-dla-przedszkolakow-zory.jpg" alt="Nauczyciel rozmawiający z uczniem z empatią" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Dekoracja -->
+                    <div class="absolute -bottom-8 -left-8 w-48 h-48 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+                </div>
+                
+                <div class="order-1 lg:order-2">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-emerald-200">
+                        <i class="fa-solid fa-hands-holding-child"></i>
+                    </div>
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-2">Filar Pierwszy</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] mb-6">NVC (Porozumienie bez Przemocy)</h3>
+                    <p class="text-lg text-slate-600 font-medium leading-relaxed mb-6">
+                        Odrzucamy tradycyjny model "nauczyciel rozkazuje, uczeń wykonuje". Tworzymy przestrzeń opartą na empatii i szacunku.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed mb-8">
+                        Metoda Marshalla Rosenberga uczy nas, że każde działanie dziecka (nawet to trudne, jak bunt czy niechęć) jest próbą zaspokojenia jakiejś potrzeby. Zamiast oceniać i karać, nasi lektorzy szukają przyczyny. Uczymy dzieci rozpoznawać swoje emocje i wyrażać je bez krzywdzenia innych. Kiedy znika lęk przed oceną, znika też blokada przed mówieniem w obcym języku.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filar 2: SNO -->
+    <section class="py-24 bg-white border-y border-slate-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div>
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-blue-200">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-2">Filar Drugi</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] mb-6">SNO (Minimediacje)</h3>
+                    <p class="text-lg text-slate-600 font-medium leading-relaxed mb-6">
+                        Konflikty i trudne momenty są naturalną częścią dorastania i pracy w grupie. Nie uciekamy przed nimi.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed mb-8">
+                        Gdy pojawia się problem na zajęciach, stosujemy SNO: <strong>Spostrzeżenia, Nazwanie, Oczekiwania</strong>. To nasze autorskie podejście do mediacji. Zamiast mówić "bądź grzeczny", mówimy: "Zauważyłem, że przerywasz koledze (Spostrzeżenie). Widzę, że jesteś sfrustrowany (Nazwanie). Chciałbym, aby każdy miał szansę się wypowiedzieć (Oczekiwanie)". To buduje niesamowitą inteligencję emocjonalną u najmłodszych.
+                    </p>
+                </div>
+
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="https://a.storyblok.com/f/295239851056156/1200x900/e475949895/angielski-dla-dzieci-gliwice.jpg" alt="Dzieci współpracujące w małej grupie" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Dekoracja -->
+                    <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Filar 3: Brak ocen -->
+    <section class="py-24 bg-[#F8FAFC] overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative order-2 lg:order-1">
+                    <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?auto=format&fit=crop&w=800&q=80" alt="Feedback i współpraca" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Dekoracja -->
+                    <div class="absolute -bottom-8 -left-8 w-48 h-48 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+                </div>
+                
+                <div class="order-1 lg:order-2">
+                    <div class="w-16 h-16 bg-orange-100 text-[#F38160] rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-[#fbc5b6]">
+                        <i class="fa-solid fa-file-signature"></i>
+                    </div>
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-2">Filar Trzeci</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] mb-6">Zero Ocen (Feedback Opisowy)</h3>
+                    <p class="text-lg text-slate-600 font-medium leading-relaxed mb-6">
+                        System od 1 do 6 zabija motywację wewnętrzną. Uczeń uczy się dla oceny, a nie dla siebie. W Home of Bears z tym kończymy.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed mb-8">
+                        Nie stawiamy stopni, nie robimy rankingów, nie przyznajemy czerwonych pasków. Zamiast tego oferujemy <strong>informację zwrotną (feedback)</strong>. Dziecko (oraz rodzic) dowiaduje się dokładnie, co robi świetnie, a nad czym warto jeszcze popracować. Błąd traktujemy z czułością – jako dowód na to, że uczeń próbuje i się rozwija.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filar 4: Samoregulacja -->
+    <section class="py-24 bg-white border-y border-slate-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div>
+                    <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-purple-200">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-2">Filar Czwarty</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] mb-6">Samoregulacja Ucznia</h3>
+                    <p class="text-lg text-slate-600 font-medium leading-relaxed mb-6">
+                        Naszym ostatecznym celem jest oddanie odpowiedzialności za naukę w ręce ucznia.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed mb-8">
+                        Nie możemy uczyć się za dzieci. Możemy jednak wyposażyć je w narzędzia do <strong>Self-regulation</strong> (samoregulacji). Uczymy, jak planować naukę, jak radzić sobie ze znużeniem, jak ustalać cele i wyciągać wnioski z potknięć. To kompetencja przyszłości, która przydaje się nie tylko na angielskim, ale przez całe dorosłe życie.
+                    </p>
+                </div>
+
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80" alt="Uczeń skupiony na planowaniu i nauce" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Dekoracja -->
+                    <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- POZOSTAŁE FUNDAMENTY (Siatka 11 elementów z oryginalnej strony) -->
+    <section class="py-24 bg-[#FCFAF5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Holistyczne podejście</h2>
+                <h3 class="text-4xl font-extrabold text-[#0f172a] leading-tight mb-6">Więcej niż metoda</h3>
+                <p class="text-lg text-slate-600 font-medium">To kompletny ekosystem edukacyjny. Poznaj pozostałe 11 wartości, na których każdego dnia opieramy pracę z Twoim dzieckiem.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Uważność -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-leaf"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Uważność</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Skupianie się na chwili, bycie "tu i teraz". Tajną mocą uważności jest oddech. Używamy technik oddechowych, by pomóc dzieciom wrócić do siebie i być prawdziwie obecnym.</p>
+                </div>
+
+                <!-- Akceptacja -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-thumbs-up"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Akceptacja</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Akceptujemy dzieci takimi, jakimi są. Nikt nie jest porównywany. Dajemy uczniom czas i umiejętność popatrzenia na siebie z łagodnością i życzliwością.</p>
+                </div>
+
+                <!-- Dawanie Przestrzeni -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-500 rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-expand"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Dawanie Przestrzeni</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Nie kształtujemy dziecka według własnych pomysłów, lecz pomagamy mu spojrzeć z perspektywy jego potrzeb. Uczniowie są obdarzani uwagą, a ich pomysły brane pod uwagę.</p>
+                </div>
+
+                <!-- Dbanie o różnorodność -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-purple-50 text-purple-500 rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-palette"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Dbanie o Różnorodność</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Inna perspektywa to ogromne możliwości. Każdy jest unikatowy, dlatego zamiast się wpasowywać, chcemy aby w inności uczniowie dostrzegli wyjątkowy dar.</p>
+                </div>
+
+                <!-- Neuroplastyczność -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-pink-50 text-pink-500 rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-network-wired"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Neuroplastyczność</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Tworzenie nowych połączeń neuronalnych wymaga czasu. Wykorzystujemy neuroplastyczność do wprowadzania innowacji i budowania trwałej wiedzy w bezpieczny sposób.</p>
+                </div>
+
+                <!-- Relacja -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-orange-50 text-[#F38160] rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-handshake-angle"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Relacja</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">To podstawa edukacji. Zależy nam, by dzieci i mentorzy obdarzali się zaufaniem, budując niesamowity komfort i bezpieczeństwo na każdych zajęciach.</p>
+                </div>
+
+                <!-- Mózg na Tak -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-yellow-50 text-yellow-500 rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-lightbulb"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Mózg na "TAK"</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Postawa polegająca na szukaniu rozwiązań i postrzeganiu sytuacji jako szansy. Daje możliwość złapania dystansu i wykorzystania niepowodzeń do osiągania celów.</p>
+                </div>
+
+                <!-- Entuzjazm -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-red-50 text-red-500 rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-fire"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Entuzjazm</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Naturalny katalizator wiedzy, który przyspiesza naukę z siłą prędkości nadświetlnej. Szukamy entuzjazmu razem z uczniami, pielęgnując go każdego dnia.</p>
+                </div>
+
+                <!-- Wdzięczność -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-teal-50 text-teal-500 rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-hands-praying"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Wdzięczność</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Siła otwierająca nowe przestrzenie w edukacji. Dziękowanie za zaangażowanie i bycie docenionym niesie energię, która pociąga całe grupy do radosnej współpracy.</p>
+                </div>
+            </div>
+
+            <!-- Osobny grid na 2 elementy, by idealnie wypełniły dolny rząd na dużych ekranach -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                <!-- Życzliwość -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-[#fdeae5] text-[#e56742] rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Życzliwość</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Postawa pełna przychylności, połączona z próbą zobaczenia człowieka stojącego za swoimi mechanizmami obronnymi. Uczy, jak patrzeć na innych z otwartością, ale co najważniejsze – pokazuje, jak zachować kluczową łagodność dla samego siebie podczas trudów nauki. Życzliwość pozwala na akceptację i odzwierciedlenie tego, co naprawdę słyszymy lub widzimy.
+                    </p>
+                </div>
+
+                <!-- Ruch -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-12 h-12 bg-sky-50 text-sky-500 rounded-xl flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-person-running"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl mb-3">Ruch</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Obecny zawsze i w każdej możliwej formie – czy to w tańcu, podskokach, spacerowaniu po sali, czy po prostu w ćwiczeniu świadomego oddechu. Jest on absolutnie niezbędny do odpowiedniego natlenienia i aktywowania mózgu, co pozwala na tworzenie nowych połączeń neuronalnych warunkujących efektywne budowanie nowych kompetencji językowych.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <Footer />
+    
+    <LekcjaModal />
+    <ZapisyModal />
+
+    <script is:inline>
+        window.toggleModal = function(modalID) {
+            const modal = document.getElementById(modalID);
+            if(!modal) return;
+            
+            const backdrop = modal.querySelector('.modal-backdrop');
+            const panel = modal.querySelector('.modal-panel');
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; 
+                backdrop?.classList.add('opacity-100');
+                backdrop?.classList.remove('opacity-0');
+                panel?.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                document.body.style.overflow = 'hidden';
+            } else {
+                backdrop?.classList.remove('opacity-100');
+                backdrop?.classList.add('opacity-0');
+                panel?.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

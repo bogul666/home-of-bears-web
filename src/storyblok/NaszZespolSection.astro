@@ -1,0 +1,44 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
+
+const { blok } = Astro.props;
+---
+
+<section {...storyblokEditable(blok)} id="zespol" class="py-15 bg-white border-t border-slate-100 overflow-hidden relative">
+    
+    <!-- Dekoracyjne tło dodające głębi (TAYA Style) -->
+    <div class="absolute top-0 left-0 w-[40rem] h-[40rem] bg-emerald-50 rounded-full mix-blend-multiply filter blur-[80px] -translate-y-1/2 -translate-x-1/2"></div>
+    <div class="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-orange-50 rounded-full mix-blend-multiply filter blur-[80px] translate-y-1/3 translate-x-1/4"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+      <!-- <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">
+                {blok.kicker || "Nasz Zespół"}
+            </h2>
+            <h3 class="text-4xl md:text-5xl font-extrabold text-[#0f172a] leading-tight mb-6">
+                {blok.title || "Mentorzy z pasją i sercem"}
+            </h3>
+            <p class="text-xl text-slate-600 font-medium">
+                {blok.description || "Odrzucamy tradycyjny model 'nauczyciela z dziennikiem'. Nasi lektorzy to przewodnicy, którzy wspierają Twoje dziecko w bezpiecznym odkrywaniu języka."}
+            </p>
+        </div> -->
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {
+                blok.czlonkowie?.map((czlonek) => {
+                    return <StoryblokComponent blok={czlonek} />
+                })
+            }
+            
+            {/* Zabezpieczenie (Fallback), gdybyśmy jeszcze nie dodali lektorów */}
+            {(!blok.czlonkowie || blok.czlonkowie.length === 0) && (
+                <div class="col-span-1 sm:col-span-2 lg:col-span-4 text-center p-12 border-2 border-dashed border-slate-300 rounded-3xl text-slate-500 font-medium bg-slate-50">
+                    Brak członków zespołu. Dodaj bloki "czlonek_zespolu" w panelu Storyblok do pola "czlonkowie".
+                </div>
+            )}
+        </div>
+        
+    </div>
+</section>

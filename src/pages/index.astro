@@ -1,0 +1,85 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import ZapisyModal from '../components/ZapisyModal.astro';
+import LekcjaModal from '../components/LekcjaModal.astro';
+import '../styles/global.css';
+
+// Pobieranie danych Storyblok dla strony głównej
+const storyblokApi = useStoryblokApi();
+const { data: homeData } = await storyblokApi.get('cdn/stories/home', { 
+    version: import.meta.env.DEV ? 'draft' : 'published' 
+});
+const story = homeData.story;
+
+// Pobieranie ustawień globalnych (dla Nawigacji i innych elementów wspólnych)
+let globalSettings = {};
+try {
+  const { data } = await storyblokApi.get('cdn/stories/ustawienia/global', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  globalSettings = data.story;
+} catch (error) {
+  console.log("Nie znaleziono ustawień globalnych. Sprawdź, czy masz folder 'ustawienia' i wpis 'global' w Storybloku.");
+}
+---
+
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home of Bears - Nowoczesna Szkoła Językowa | Gliwice i Żory</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-slate-800 bg-[#F8FAFC] antialiased overflow-x-hidden">
+
+    <!-- Dodajemy pobrane dane do komponentu Navbar -->
+    <Navbar blok={globalSettings?.content} />
+
+    <StoryblokComponent blok={story.content} />
+
+    <Footer />
+
+    <!-- Dodajemy oba Modale na dół strony -->
+    <ZapisyModal />
+    <LekcjaModal />
+
+    <!-- Inteligentny skrypt do otwierania modali -->
+    <script is:inline>
+        window.toggleModal = function(modalID) {
+            const modal = document.getElementById(modalID);
+            if(!modal) return;
+            
+            const backdrop = modal.querySelector('.modal-backdrop');
+            const panel = modal.querySelector('.modal-panel');
+            
+            if (modal.classList.contains('hidden')) {
+                // Otwieranie modalu
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; // Wymuś odświeżenie klatki przeglądarki
+                
+                backdrop?.classList.add('opacity-100');
+                backdrop?.classList.remove('opacity-0');
+                panel?.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                
+                document.body.style.overflow = 'hidden';
+            } else {
+                // Zamykanie modalu
+                backdrop?.classList.remove('opacity-100');
+                backdrop?.classList.add('opacity-0');
+                panel?.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

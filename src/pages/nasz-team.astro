@@ -1,0 +1,131 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import ZapisyModal from '../components/ZapisyModal.astro'; 
+import LekcjaModal from '../components/LekcjaModal.astro'; 
+import '../styles/global.css';
+
+const storyblokApi = useStoryblokApi();
+
+// 1. Pobieranie ustawień globalnych (Nawigacja)
+let globalSettings = {};
+try {
+  const { data } = await storyblokApi.get('cdn/stories/ustawienia/global', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  globalSettings = data.story;
+} catch (error) {
+  console.log("Używam domyślnego navbara, nie znaleziono ustawień globalnych");
+}
+
+// 2. Pobieranie danych dedykowanych dla strony zespołu
+let story = null;
+try {
+  const { data } = await storyblokApi.get('cdn/stories/zespol', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  story = data.story;
+} catch (error) {
+  console.log("Nie znaleziono wpisu 'zespol' w Storybloku.");
+}
+---
+
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nasz Zespół - Home of Bears</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-slate-800 bg-[#F8FAFC] antialiased overflow-x-hidden">
+
+    <Navbar blok={globalSettings?.content} />
+
+    <!-- HERO SECTION - Zespół -->
+    <header class="relative pt-40 pb-10 lg:pt-48 lg:pb-24 overflow-hidden bg-white">
+        <!-- Dekoracyjne tło nawiązujące do ciepła i relacji -->
+        <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#fdeae5] rounded-full mix-blend-multiply filter blur-[80px] -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-orange-50 rounded-full mix-blend-multiply filter blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <span class="inline-block py-1 px-3 rounded-full bg-[#fef5f3] text-[#e56742] font-bold text-sm tracking-wide mb-6 uppercase border border-[#fbc5b6]">
+                    Ludzie Home of Bears
+                </span>
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#0f172a] tracking-tight leading-[1.1] mb-8">
+                    Mentorzy, z którymi <br><span class="text-[#F38160]">chce się rozmawiać.</span>
+                </h1>
+                <p class="text-xl text-slate-600 mb-10 leading-relaxed font-medium">
+                    Nie zatrudniamy "wykładowców z dziennikiem". Szukamy pasjonatów z ogromnym sercem, niesamowitą energią i kompetencjami miękkimi. Poznaj osoby, które będą wspierać Twoje dziecko.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- DYNAMICZNA SEKCJA ZE STORYBLOKA -->
+    <main class="min-h-[40vh] bg-white relative z-20">
+        {story ? (
+            <StoryblokComponent blok={story.content} />
+        ) : (
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+                <div class="p-12 border-2 border-dashed border-slate-300 rounded-3xl bg-slate-50 text-slate-500 font-medium">
+                    <i class="fa-solid fa-people-group text-4xl mb-4 text-slate-300 block"></i>
+                    Podstrona gotowa! Teraz wejdź do Storybloka, utwórz nowy wpis o nazwie <strong>zespol</strong> i dodaj w nim blok <strong>nasz_zespol_section</strong>.
+                </div>
+            </div>
+        )}
+    </main>
+
+    <!-- PROSTE CTA NA DOLE (Opcjonalne, ale bardzo skuteczne) -->
+    <section class="py-20 bg-[#F8FAFC] border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h3 class="text-3xl font-extrabold text-[#0f172a] mb-6">Chcesz dołączyć do naszej paczki?</h3>
+            <p class="text-lg text-slate-600 mb-8 font-medium">Zawsze szukamy utalentowanych mentorów, którzy podzielają nasze wartości (NVC, praca bez ocen).</p>
+            <a href="/praca" class="inline-block px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-[#F38160] hover:text-[#F38160] transition-all">
+                Sprawdź kogo szukamy (Kariera)
+            </a>
+        </div>
+    </section>
+
+    <Footer />
+    
+    <LekcjaModal />
+    <ZapisyModal />
+
+    <script is:inline>
+        window.toggleModal = function(modalID) {
+            const modal = document.getElementById(modalID);
+            if(!modal) return;
+            
+            const backdrop = modal.querySelector('.modal-backdrop');
+            const panel = modal.querySelector('.modal-panel');
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; 
+                backdrop?.classList.add('opacity-100');
+                backdrop?.classList.remove('opacity-0');
+                panel?.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                document.body.style.overflow = 'hidden';
+            } else {
+                backdrop?.classList.remove('opacity-100');
+                backdrop?.classList.add('opacity-0');
+                panel?.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

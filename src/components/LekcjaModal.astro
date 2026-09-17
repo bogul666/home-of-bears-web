@@ -1,0 +1,142 @@
+---
+---
+<div id="lekcjaModal" class="hidden fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
+    <!-- Tło zaciemniające -->
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleModal('lekcjaModal')"></div>
+
+    <!-- Panel okna (wycentrowany) -->
+    <div class="relative w-full max-w-xl bg-white rounded-[2rem] shadow-2xl border border-slate-100 overflow-hidden z-10 max-h-[90vh] flex flex-col my-auto mx-auto">
+        
+        <button type="button" onclick="toggleModal('lekcjaModal')" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors z-20 cursor-pointer">
+            <span class="sr-only">Zamknij</span>
+            <i class="fa-solid fa-xmark text-2xl"></i>
+        </button>
+
+        <div class="px-6 pt-10 pb-8 sm:px-10 overflow-y-auto w-full">
+            
+            <div id="formContainer" class="w-full mx-auto">
+                <div class="text-center mb-8">
+                    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#fdeae5] mb-4">
+                        <i class="fa-solid fa-calendar-check text-2xl text-[#F38160]"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold leading-6 text-[#0f172a]" id="modal-title">Zarezerwuj darmową lekcję</h3>
+                    <p class="text-sm text-slate-500 mt-3 font-medium">Poznajmy się! Zostaw dane, a my skontaktujemy się z Tobą, by ustalić idealny termin.</p>
+                </div>
+                
+                <form id="lekcjaForm" class="space-y-5 text-left">
+                    <input type="hidden" name="access_key" value="bf5cec56-0e47-45a2-be98-494d1a7ae4d7">
+                    <input type="hidden" name="subject" value="Nowa rezerwacja lekcji pokazowej - Home of Bears!">
+                    <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                            <label for="childName" class="block text-sm font-bold text-slate-700 mb-1">Imię dziecka *</label>
+                            <input type="text" name="Imię_Dziecka" id="childName" required class="block w-full rounded-xl border-0 py-3 px-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-[#F38160] sm:text-sm bg-slate-50 transition-all font-medium">
+                        </div>
+                        <div>
+                            <label for="childAge" class="block text-sm font-bold text-slate-700 mb-1">Wiek dziecka *</label>
+                            <input type="number" name="Wiek_Dziecka" id="childAge" required min="3" max="19" class="block w-full rounded-xl border-0 py-3 px-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-[#F38160] sm:text-sm bg-slate-50 transition-all font-medium">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="parentName" class="block text-sm font-bold text-slate-700 mb-1">Twoje imię i nazwisko *</label>
+                        <input type="text" name="Imię_Rodzica" id="parentName" required class="block w-full rounded-xl border-0 py-3 px-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-[#F38160] sm:text-sm bg-slate-50 transition-all font-medium">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                            <label for="email" class="block text-sm font-bold text-slate-700 mb-1">Adres e-mail *</label>
+                            <input type="email" name="Email" id="email" required class="block w-full rounded-xl border-0 py-3 px-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-[#F38160] sm:text-sm bg-slate-50 transition-all font-medium">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-bold text-slate-700 mb-1">Numer telefonu *</label>
+                            <input type="tel" name="Telefon" id="phone" required class="block w-full rounded-xl border-0 py-3 px-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-[#F38160] sm:text-sm bg-slate-50 transition-all font-medium">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="location" class="block text-sm font-bold text-slate-700 mb-1">Preferowana lokalizacja *</label>
+                        <div class="relative">
+                            <select name="Lokalizacja" id="location" required class="block w-full rounded-xl border-0 py-3 px-4 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-[#F38160] sm:text-sm bg-slate-50 transition-all font-medium appearance-none cursor-pointer">
+                                <option value="" disabled selected>Wybierz placówkę...</option>
+                                <option value="Gliwice, ul. Przyszowska">Gliwice, ul. Przyszowska 67</option>
+                                <option value="Gliwice, ul. Elsnera">Gliwice, ul. Elsnera 23</option>
+                                <option value="Żory, ul. Bankowa">Żory, ul. Bankowa 4a/2b</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 text-center">
+                        <button type="submit" id="submitBtn" class="w-full bg-[#F38160] hover:bg-[#e56742] text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-[#F38160]/30 transition-all duration-300 transform hover:-translate-y-0.5 flex justify-center items-center gap-2 group cursor-pointer">
+                            Wyślij zgłoszenie <i class="fa-regular fa-paper-plane transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></i>
+                        </button>
+                        <p id="resultMsg" class="text-center text-xs text-slate-400 mt-4 px-4">Twoje dane są bezpieczne. Wysyłane na adres zapisy@homeofbears.pl.</p>
+                    </div>
+                </form>
+            </div>
+
+            <div id="successContainer" class="hidden text-center py-8 mx-auto">
+                <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-green-100 mb-6">
+                    <i class="fa-solid fa-check text-4xl text-green-500"></i>
+                </div>
+                <h3 class="text-3xl font-extrabold text-[#0f172a] mb-4">Mamy to!</h3>
+                <p class="text-slate-600 text-lg mb-8 font-medium">
+                    Dziękujemy za przesłanie zgłoszenia. Oddzwonimy do Ciebie w ciągu 24 godzin! 🐻
+                </p>
+                <button type="button" onclick="toggleModal('lekcjaModal')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-4 px-8 rounded-xl transition-colors cursor-pointer">
+                    Wróć do strony
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script is:inline>
+    window.toggleModal = function(modalID) {
+        const modal = document.getElementById(modalID);
+        if (!modal) return;
+        
+        if (modal.classList.contains('hidden')) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        } else {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+    };
+
+    const form = document.getElementById('lekcjaForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const submitBtn = document.getElementById('submitBtn');
+            const formContainer = document.getElementById('formContainer');
+            const successContainer = document.getElementById('successContainer');
+
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Wysyłanie...';
+            submitBtn.disabled = true;
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(Object.fromEntries(formData))
+            })
+            .then(async (response) => {
+                if (response.status == 200) {
+                    formContainer.classList.add('hidden');
+                    successContainer.classList.remove('hidden');
+                    form.reset();
+                }
+            })
+            .catch(error => { console.log(error); });
+        });
+    }
+</script>

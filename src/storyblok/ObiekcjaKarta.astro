@@ -1,0 +1,24 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+const { blok } = Astro.props;
+---
+
+<div {...storyblokEditable(blok)} class="bg-slate-50 rounded-3xl p-8 border border-transparent hover:border-slate-200 transition-colors flex flex-col h-full shadow-sm hover:shadow-md">
+    <!-- Ikona i pytanie rodzica -->
+    <div class="flex items-start gap-4 mb-6">
+        <div class="w-10 h-10 bg-red-100 text-red-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">🤔</div>
+        <h4 class="text-lg font-bold text-[#0f172a] italic leading-snug">
+            "{blok.pytanie}"
+        </h4>
+    </div>
+    
+    <!-- Rozwiązanie szkoły -->
+    <div class="pl-14 flex-grow flex flex-col">
+        <div class="flex items-center gap-2 text-[#F38160] font-bold mb-2">
+            <i class="fa-solid fa-check"></i> Nasze rozwiązanie
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed">
+            {blok.odpowiedz}
+        </p>
+    </div>
+</div>

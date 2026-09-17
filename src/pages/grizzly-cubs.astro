@@ -1,0 +1,290 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import PricingCalculator from '../components/PricingCalculator.jsx';
+import ZapisyModal from '../components/ZapisyModal.astro'; 
+import LekcjaModal from '../components/LekcjaModal.astro'; 
+import '../styles/global.css';
+
+const storyblokApi = useStoryblokApi();
+let globalSettings = {};
+try {
+  const { data } = await storyblokApi.get('cdn/stories/ustawienia/global', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  globalSettings = data.story;
+} catch (error) {
+  console.log("Używam domyślnego navbara, nie znaleziono ustawień globalnych");
+}
+---
+
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kursy Grizzly Cubs (7-9 lat) - Home of Bears</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-slate-800 bg-[#FCFAF5] antialiased overflow-x-hidden">
+
+    <Navbar blok={globalSettings?.content} />
+
+    <!-- HERO SECTION -->
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-white border-b border-slate-100">
+        <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#fef5f3] rounded-full mix-blend-multiply filter blur-[80px] -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-orange-50 rounded-full mix-blend-multiply filter blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#fef5f3] border border-[#fbc5b6] text-[#e56742] font-bold text-sm mb-6 shadow-sm uppercase tracking-wider">
+                        🐻 Kursy Grizzly Cubs | Grupa Wiekowa: 7-9 lat
+                    </div>
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-[#0f172a] tracking-tight leading-[1.1] mb-6">
+                        Płynny angielski, który daje <span class="text-[#F38160]">szkolną pewność siebie.</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed font-medium">
+                        Koniec ze zmuszaniem do wkuwania słówek. Kursy Grizzly Cubs to nauka przez ruch (Dynamic English), wsparcie emocjonalne (NVC) i nacisk na <strong>przełamywanie bariery w mówieniu</strong> od pierwszych lat szkoły.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button onclick="toggleModal('eduskyModal')" class="px-8 py-4 bg-[#F38160] text-white font-bold rounded-xl hover:bg-[#e56742] transition-all shadow-md text-center cursor-pointer">
+                            Zapisz na zajęcia
+                        </button>
+                        <a href="#cennik" class="px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-[#F38160] hover:text-[#F38160] transition-all text-center">
+                            Sprawdź cennik
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80" alt="Dzieci w wieku wczesnoszkolnym na zajęciach" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl z-20 border border-slate-100 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-comments"></i></div>
+                        <div>
+                            <p class="font-bold text-[#0f172a] text-sm">Przełamujemy barierę</p>
+                            <p class="text-xs text-slate-500">Uczymy swobodnie mówić</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <section id="metoda" class="py-24 bg-[#FCFAF5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Twarde Fakty</h2>
+                <h3 class="text-4xl font-extrabold text-[#0f172a] leading-tight mb-6">Jak uczymy dzieci 7-9 letnie?</h3>
+                <p class="text-lg text-slate-600 font-medium">To wiek pierwszych wyzwań szkolnych. Dajemy dzieciom narzędzia, by radziły sobie ze stresem i uczyły się angielskiego z prawdziwą pasją.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-regular fa-clock"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">1x 90 lub 2x 60 min</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Optymalny czas zajęć. Intensywne sesje pozwalają na pełne zanurzenie w języku (Deep Work) bez pośpiechu i z dbałością o relacje.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-[#fdeae5] text-[#F38160] rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-person-running"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">Dynamic English</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Koniec z siedzeniem w ławkach po ciężkim dniu w szkole. Dzieci uczą się przez ruch, odgrywanie ról i gry komunikacyjne.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-yellow-50 text-yellow-600 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-shapes"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">Wizualna Gramatyka</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Złote Proporcje (Golden Division) - tłumaczymy struktury gramatyczne na klockach i obrazach, by dziecko je rozumiało, a nie tylko recytowało.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-purple-50 text-purple-500 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-shield-heart"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">Bez Ocen (NVC)</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Tworzymy całkowicie bezpieczne środowisko. Błąd to naturalny krok w nauce, a nie powód do czerwonego długopisu i stresu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ZAAKCENTOWANA SEKCJA EDUKACYJNA -->
+    <section class="py-24 bg-white border-t border-slate-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div class="order-2 lg:order-1 relative">
+                    <div class="absolute -inset-4 bg-[#FCFAF5] rounded-[3rem] -z-10 transform -rotate-1"></div>
+                    
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Metoda Grizzly</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] leading-tight mb-6">Uczymy mówić, nie tylko rozwiązywać testy</h3>
+                    <p class="text-slate-600 font-medium leading-relaxed mb-8 text-lg">
+                        Szkoła systemowa skupia się na czytaniu i pisaniu. My odwracamy ten proces. Najpierw <strong>budujemy pewność siebie w mówieniu</strong>, a dopiero potem obudowujemy to gramatyką.
+                    </p>
+
+                    <div class="space-y-8">
+                        <div class="flex gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-white border border-[#fbc5b6] text-[#F38160] shadow-sm flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fa-solid fa-microphone text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-[#0f172a] mb-2">Komunikacja na pierwszym miejscu</h4>
+                                <p class="text-slate-600 leading-relaxed font-medium">Stwarzamy setki okazji do wypowiadania się w parach i grupach. Dziecko szybko zauważa, że angielski służy do dogadywania się, a nie do zaliczania sprawdzianów.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-white border border-blue-200 text-blue-500 shadow-sm flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fa-solid fa-book-open text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-[#0f172a] mb-2">Czytanie i pisanie w akcji</h4>
+                                <p class="text-slate-600 leading-relaxed font-medium">Wprowadzamy te umiejętności stopniowo, w sposób dopasowany do wieku (early school), używając angażujących materiałów, bez przytłaczających ilości nudnych kserówek.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-white border border-green-200 text-green-500 shadow-sm flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fa-solid fa-users text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-[#0f172a] mb-2">Budowanie relacji</h4>
+                                <p class="text-slate-600 leading-relaxed font-medium">Wykorzystujemy tzw. Social Technology. Uczniowie współpracują, pomagają sobie nawzajem i rozwiązują problemy w grupie pod okiem uważnego lektora-mentora.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-1 lg:order-2">
+                    <div class="aspect-square md:aspect-[4/5] rounded-[3rem] overflow-hidden shadow-xl relative border-8 border-white">
+                        <img src="cubs.png" alt="Praca w grupie starszych dzieci" class="w-full h-full object-cover">
+                        <!-- Nakładka z misiem -->
+                        <div class="absolute bottom-6 right-6 w-24 h-24 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-slate-100 p-2 transform rotate-12 hover:rotate-0 transition-transform">
+                            <img src="/grizzly_cubs.png" alt="Grizzly Cubs Mascot" class="w-full h-full object-contain drop-shadow-md" onerror="this.style.display='none'; this.parentNode.innerHTML='<i class=\'fa-solid fa-star text-3xl text-yellow-400\'></i>'">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-[#0f172a] relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-[#F38160] rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Współpraca z Domem</h2>
+            <h3 class="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-8">Nadal jesteś częścią tego procesu</h3>
+            <p class="text-lg text-slate-300 max-w-2xl mx-auto font-medium mb-16">
+                Chociaż Twoje dziecko staje się coraz bardziej samodzielne, my stawiamy na pełną transparentność. Dokładnie wiesz, jakie robi postępy.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-[2rem] hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-[#F38160] text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm"><i class="fa-solid fa-comment-dots"></i></div>
+                    <h4 class="text-white font-bold text-xl mb-3">Opisowy Feedback</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium">Oceny szkolne bywają mylące i demotywujące. My stosujemy cykliczny feedback opisowy. Informujemy Cię, co dziecko opanowało, a nad czym warto pracować.</p>
+                </div>
+                
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-[2rem] hover:-translate-y-1 transition-transform relative overflow-hidden flex flex-col">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full mix-blend-overlay filter blur-3xl opacity-50"></div>
+                    <div class="w-14 h-14 bg-blue-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm relative z-10"><i class="fa-solid fa-mobile-screen"></i></div>
+                    <h4 class="text-white font-bold text-xl mb-3 relative z-10">Strefa Rodzica eduSky</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium relative z-10 flex-grow">
+                        Brak własnej aplikacji? Żaden problem. Dajemy Ci dostęp do potężnej Strefy Rodzica eduSky. Sprawdzisz w niej frekwencję, finanse oraz wiadomości od lektora.
+                    </p>
+                    <a href="https://homeofteddy.edusky.pl/" target="_blank" rel="noopener noreferrer" class="mt-6 text-white font-bold border-b border-blue-400 pb-1 hover:text-blue-300 self-start transition-colors relative z-10">
+                        Zaloguj się do e-dziennika &rarr;
+                    </a>
+                </div>
+                
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-[2rem] hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-green-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm"><i class="fa-solid fa-seedling"></i></div>
+                    <h4 class="text-white font-bold text-xl mb-3">Wsparcie w adaptacji</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium">Wiemy, że nowa grupa rówieśnicza to stres. Stosujemy minimediacje i dajemy czas. Uczeń może poczuć się pewnie we własnym tempie, bez presji otoczenia.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEKCJA FAQ -->
+    <section class="py-24 bg-[#F8FAFC] border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Częste obawy</h2>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] leading-tight">Szczere odpowiedzi na pytania rodziców</h3>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="text-lg font-bold text-[#0f172a] mb-3 flex items-start gap-3">
+                        <span class="text-[#F38160]">Q:</span> Czy moje dziecko poradzi sobie, jeśli w szkole ma problemy z angielskim?
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-sm font-medium">Tak. Problemy w szkole najczęściej wynikają ze stresu, presji i lęku przed oceną. U nas te czynniki znikają. W bezpiecznym środowisku, przy akceptacji błędów, dzieci szybko nadrabiają zaległości i odzyskują wiarę w siebie.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="text-lg font-bold text-[#0f172a] mb-3 flex items-start gap-3">
+                        <span class="text-[#F38160]">Q:</span> Jak wyglądają zajęcia 90-minutowe? Czy to nie za długo dla 8-latka?
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-sm font-medium">Absolutnie nie. To nie są "szkolne" lekcje. Co kilkanaście minut zmieniamy dynamikę. Przeplatamy bardzo aktywne gry ruchowe z momentami wyciszenia. Dzieci wychodzą z zajęć pełne energii.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="text-lg font-bold text-[#0f172a] mb-3 flex items-start gap-3">
+                        <span class="text-[#F38160]">Q:</span> Czy przygotowujecie do szkolnych sprawdzianów?
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-sm font-medium">Naszym nadrzędnym celem jest to, by uczeń **potrafił komunikować się** po angielsku. Skupiamy się na umiejętnościach praktycznych. Z naszego doświadczenia wynika, że dzieci pewne siebie językowo rozwiązują testy w szkole bez problemu jako "efekt uboczny".</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KALKULATOR CEN -->
+    <PricingCalculator client:load title="Inwestycja w program Grizzly Cubs" />
+
+    <Footer />
+    
+    <LekcjaModal />
+    <ZapisyModal />
+
+    <!-- Skrypt do Modali -->
+    <script is:inline>
+        window.toggleModal = function(modalID) {
+            const modal = document.getElementById(modalID);
+            if(!modal) return;
+            
+            const backdrop = modal.querySelector('.modal-backdrop');
+            const panel = modal.querySelector('.modal-panel');
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; 
+                backdrop?.classList.add('opacity-100');
+                backdrop?.classList.remove('opacity-0');
+                panel?.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                document.body.style.overflow = 'hidden';
+            } else {
+                backdrop?.classList.remove('opacity-100');
+                backdrop?.classList.add('opacity-0');
+                panel?.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
+```
+
+### Aktualizacja Kalkulatora
+
+Ponieważ na tej podstronie używamy tego samego uniwersalnego kalkulatora `PricingCalculator.jsx`, automatycznie obsłuży on tę nową stronę (wystarczy, że użytkownik rozwinie odpowiednią grupę w kalkulatorze - wszystkie czasy zajęć: 90 min i 60 min, wyliczą się zgodnie z planem, który zaimplementowaliśmy na Stronie Głównej).

@@ -1,0 +1,229 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import ZapisyModal from '../components/ZapisyModal.astro'; 
+import LekcjaModal from '../components/LekcjaModal.astro'; 
+import '../styles/global.css';
+
+const storyblokApi = useStoryblokApi();
+let globalSettings = {};
+try {
+  const { data } = await storyblokApi.get('cdn/stories/ustawienia/global', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  globalSettings = data.story;
+} catch (error) {
+  console.log("Używam domyślnego navbara, nie znaleziono ustawień globalnych");
+}
+---
+
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nasze Energie - Metodyka Home of Bears</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-slate-800 bg-[#F8FAFC] antialiased overflow-x-hidden">
+
+    <Navbar blok={globalSettings?.content} />
+
+    <header class="relative pt-40 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-white border-b border-slate-100">
+        <!-- Dekoracyjne tło -->
+        <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-orange-50 rounded-full mix-blend-multiply filter blur-[80px] -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-blue-50 rounded-full mix-blend-multiply filter blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <span class="inline-block py-1 px-3 rounded-full bg-[#fdeae5] text-[#e56742] font-bold text-sm tracking-wide mb-6 uppercase border border-[#fbc5b6]">
+                    Metodyka Home of Bears
+                </span>
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#0f172a] tracking-tight leading-[1.1] mb-8">
+                    Nauka, która ma <span class="text-[#F38160]">4 wymiary.</span>
+                </h1>
+                <p class="text-xl text-slate-600 mb-10 leading-relaxed font-medium">
+                    Dlaczego nie używamy tradycyjnych podręczników? Bo mózg uczy się najlepiej, gdy angażujemy emocje, ruch, relacje i obraz. Poznaj 4 Energie, które napędzają nasze zajęcia i przełamują bariery.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-24 bg-[#F8FAFC] overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative order-2 lg:order-1">
+                    <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="https://a.storyblok.com/f/295239851056156/2048x1365/3df6541ddd/zory-angielski-przedszkolaki.jpg" alt="Lektor uśmiechający się do ucznia" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Dekoracja -->
+                    <div class="absolute -bottom-8 -left-8 w-48 h-48 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+                </div>
+                
+                <div class="order-1 lg:order-2">
+                    <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-purple-200">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-2">Energia nr 1</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] mb-6">Teaching in Empathy (NVC)</h3>
+                    <p class="text-lg text-slate-600 font-medium leading-relaxed mb-6">
+                        Uczymy przez relację, a nie przez hierarchię. Nasi lektorzy to mentorzy, którzy nie stosują kar, nagród, ani ocen.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed mb-8">
+                        Opieramy się na <strong>Porozumieniu bez Przemocy (NVC)</strong> Marshalla Rosenberga. Wiemy, że za każdym zachowaniem ucznia (nawet buntem) stoi jakaś niezaspokojona potrzeba. Zamiast oceniać - pytamy, słuchamy i wspieramy. Tworzymy całkowicie bezpieczne środowisko, w którym błąd to tylko informacja zwrotna, a nie powód do wstydu. Właśnie dlatego znika strach przed mówieniem po angielsku.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-white border-y border-slate-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div>
+                    <div class="w-16 h-16 bg-orange-100 text-[#F38160] rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-[#fbc5b6]">
+                        <i class="fa-solid fa-person-running"></i>
+                    </div>
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-2">Energia nr 2</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] mb-6">Dynamic English</h3>
+                    <p class="text-lg text-slate-600 font-medium leading-relaxed mb-6">
+                        Dzieci po 8 godzinach w szkolnej ławce nie mogą i nie powinny siedzieć w kolejnej. Nauka wymaga ruchu.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed mb-8">
+                        Wykorzystujemy <strong>TPR (Total Physical Response)</strong>. Oznacza to, że nowe struktury i słówka przyswajamy angażując całe ciało. Biegamy, dotykamy, odgrywamy scenki. Mózg natleniony w trakcie aktywności fizycznej koduje informacje znacznie szybciej i trwalej niż podczas wpatrywania się w czarno-białe kserówki.
+                    </p>
+                </div>
+
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80" alt="Dzieci aktywne na zajęciach" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Dekoracja -->
+                    <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-[#F8FAFC] overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative order-2 lg:order-1">
+                    <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="https://a.storyblok.com/f/295239851056156/3072x4080/c623d8595e/pxl_20251203_155644061-mp.jpg" alt="Praca grupowa młodzieży" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Dekoracja -->
+                    <div class="absolute -bottom-8 -left-8 w-48 h-48 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+                </div>
+                
+                <div class="order-1 lg:order-2">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-blue-200">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-2">Energia nr 3</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] mb-6">Social Technology</h3>
+                    <p class="text-lg text-slate-600 font-medium leading-relaxed mb-6">
+                        Człowiek jest istotą społeczną. Uczymy się języka, by komunikować się z innymi ludźmi, a nie z kartką papieru.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed mb-8">
+                        Nasze zajęcia to ciągła praca w parach i mikro-zespołach. Wykorzystujemy mechanizmy znane z gier (grywalizację bez toksycznej rywalizacji), rozwiązywanie problemów, escape roomy i debaty. Uczeń nie zauważa kiedy używa angielskiego, bo jest w pełni pochłonięty zadaniem z rówieśnikami. Grupa buduje potężną motywację do działania.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-white border-y border-slate-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div>
+                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm border border-green-200">
+                        <i class="fa-solid fa-shapes"></i>
+                    </div>
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-2">Energia nr 4</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] mb-6">Golden Division (Wizualna Gramatyka)</h3>
+                    <p class="text-lg text-slate-600 font-medium leading-relaxed mb-6">
+                        Zapomnij o niezrozumiałych tabelkach w książce. Gramatyka to czysta, logiczna matematyka języka.
+                    </p>
+                    <p class="text-slate-600 leading-relaxed mb-8">
+                        Złoty podział polega na dekonstrukcji reguł. Tłumaczymy konstrukcje językowe za pomocą obrazów, symboli i kolorów. Uczniowie układają zdania jak z klocków lego. Dzięki temu struktury czasów czy trybów stają się intuicyjne do bólu. Gdy uczeń "zobaczy" i zrozumie zasadę - nie musi jej wkuwać na pamięć.
+                    </p>
+                </div>
+
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80" alt="Wizualne pomoce edukacyjne" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Dekoracja -->
+                    <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-[#0f172a] relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-[30rem] h-[30rem] bg-[#F38160] rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+        <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6">
+                Chcesz zobaczyć 4 Energie w akcji?
+            </h2>
+            <p class="text-lg text-slate-300 mb-10 max-w-2xl mx-auto font-medium">
+                Najlepiej przekonać się o tym na własnej skórze. Zapisz swoje dziecko na bezpłatną lekcję pokazową. To nic nie kosztuje i do niczego nie zobowiązuje, a może zmienić podejście Twojego dziecka do języka angielskiego na zawsze.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="toggleModal('lekcjaModal')" class="px-8 py-5 bg-[#F38160] text-white font-bold rounded-xl hover:bg-[#e56742] transition-all shadow-lg hover:shadow-[#F38160]/30 hover:-translate-y-1">
+                    Zarezerwuj darmową lekcję
+                </button>
+                <button onclick="toggleModal('eduskyModal')" class="px-8 py-5 bg-white/10 border border-white/20 text-white font-bold rounded-xl hover:bg-white/20 transition-all hover:-translate-y-1 backdrop-blur-sm">
+                    Od razu zapisz na kurs
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+    
+    <LekcjaModal />
+    <ZapisyModal />
+
+    <script is:inline>
+        window.toggleModal = function(modalID) {
+            const modal = document.getElementById(modalID);
+            if(!modal) return;
+            
+            const backdrop = modal.querySelector('.modal-backdrop');
+            const panel = modal.querySelector('.modal-panel');
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; 
+                backdrop?.classList.add('opacity-100');
+                backdrop?.classList.remove('opacity-0');
+                panel?.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                document.body.style.overflow = 'hidden';
+            } else {
+                backdrop?.classList.remove('opacity-100');
+                backdrop?.classList.add('opacity-0');
+                panel?.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

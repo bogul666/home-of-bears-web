@@ -1,0 +1,288 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import PricingCalculator from '../components/PricingCalculator.jsx';
+import ZapisyModal from '../components/ZapisyModal.astro'; 
+import LekcjaModal from '../components/LekcjaModal.astro'; 
+import '../styles/global.css';
+
+const storyblokApi = useStoryblokApi();
+let globalSettings = {};
+try {
+  const { data } = await storyblokApi.get('cdn/stories/ustawienia/global', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  globalSettings = data.story;
+} catch (error) {
+  console.log("Używam domyślnego navbara, nie znaleziono ustawień globalnych");
+}
+---
+
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kursy Polars (13+ lat) - Home of Bears</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-slate-800 bg-[#F8FAFC] antialiased overflow-x-hidden">
+
+    <Navbar blok={globalSettings?.content} />
+
+    <!-- HERO SECTION -->
+    <!-- Dla Polars używamy nieco "chłodniejszych", bardziej dojrzałych kolorów w tle -->
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-white border-b border-slate-100">
+        <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-slate-100 rounded-full mix-blend-multiply filter blur-[80px] -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-blue-50 rounded-full mix-blend-multiply filter blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 border border-slate-200 text-slate-700 font-bold text-sm mb-6 shadow-sm uppercase tracking-wider">
+                        🐻‍❄️ Kursy Polars | Grupa Wiekowa: 13+ lat
+                    </div>
+                    <h1 class="text-5xl md:text-6xl font-extrabold text-[#0f172a] tracking-tight leading-[1.1] mb-6">
+                        Płynny angielski, z którym <span class="text-[#F38160]">zdadzą każdy egzamin.</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed font-medium">
+                        Szkoła to często stres, ocenianie i wkuwanie "pod klucz". My pokazujemy młodzieży, że język służy do wyrażania siebie. Traktujemy ich po partnersku (NVC), przełamujemy blokady, a dobre wyniki na egzaminach są efektem ubocznym tej wolności.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button onclick="toggleModal('eduskyModal')" class="px-8 py-4 bg-[#F38160] text-white font-bold rounded-xl hover:bg-[#e56742] transition-all shadow-md text-center cursor-pointer">
+                            Zapisz na zajęcia
+                        </button>
+                        <a href="#cennik" class="px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-[#F38160] hover:text-[#F38160] transition-all text-center">
+                            Sprawdź cennik
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="aspect-square md:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                        <img src="https://a.storyblok.com/f/295239851056156/2400x1792/add1695d5f/mlodziez-angielski-gliwice.jpeg" alt="Młodzież ucząca się wspólnie" class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl z-20 border border-slate-100 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-slate-100 text-slate-700 rounded-full flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <div>
+                            <p class="font-bold text-[#0f172a] text-sm">Bez presji</p>
+                            <p class="text-xs text-slate-500">Mówienie i komunikacja</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <section id="metoda" class="py-24 bg-[#F8FAFC]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Twarde Fakty</h2>
+                <h3 class="text-4xl font-extrabold text-[#0f172a] leading-tight mb-6">Jak pracujemy z nastolatkami?</h3>
+                <p class="text-lg text-slate-600 font-medium">To wiek buntu i poszukiwania własnej tożsamości. Nie narzucamy, lecz współpracujemy. Wymagamy zaangażowania, dając w zamian 100% szacunku.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-regular fa-clock"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">1x 90 lub 2x 60 min</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Czas na wejście w stan "flow". Rozgrzewka, swobodna dyskusja o aktualnych wydarzeniach i solidna porcja praktycznej wiedzy (Deep Work).</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-[#fdeae5] text-[#F38160] rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-bullhorn"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">Debaty i Opinie</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Młodzież chce być słyszana. Uczymy, jak argumentować, zgadzać się lub nie zgadzać z rozmówcą – całkowicie po angielsku.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-slate-100 text-slate-600 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-shapes"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">Golden Division</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Gramatyka to dla nas matma. Rozkładamy struktury na wizualne, logiczne czynniki pierwsze. Koniec z niezrozumiałymi regułkami z książki.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-green-50 text-green-500 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-lg mb-3">Lektor to Mentor (NVC)</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">W tym wieku nikt nie lubi być pouczany. Nasi lektorzy to przewodnicy. Rozumieją presję rówieśniczą i szkolną, potrafią słuchać i mediować.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ZAAKCENTOWANA SEKCJA EDUKACYJNA -->
+    <section class="py-24 bg-white border-t border-slate-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div class="order-2 lg:order-1 relative">
+                    <div class="absolute -inset-4 bg-[#F8FAFC] rounded-[3rem] -z-10 transform -rotate-1"></div>
+                    
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Ósmoklasiści i Maturzyści</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] leading-tight mb-6">Wiedza, która zostaje na całe życie</h3>
+                    <p class="text-slate-600 font-medium leading-relaxed mb-8 text-lg">
+                        Młodzież jest przebodźcowana szkolnymi wymaganiami. W Home of Bears pokazujemy im, że angielski to nie kolejny przedmiot do "zaliczenia", ale narzędzie, które poszerza horyzonty.
+                    </p>
+
+                    <div class="space-y-8">
+                        <div class="flex gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-white border border-[#fbc5b6] text-[#F38160] shadow-sm flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fa-solid fa-file-contract text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-[#0f172a] mb-2">Egzamin jako "efekt uboczny"</h4>
+                                <p class="text-slate-600 leading-relaxed font-medium">Oczywiście, że pracujemy z arkuszami egzaminacyjnymi, by oswoić ich format. Jednak to biegłość w mówieniu, słuchaniu i rozumieniu struktur sprawia, że uczniowie zdają testy z rewelacyjnymi wynikami i bez paniki.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-white border border-slate-200 text-slate-500 shadow-sm flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fa-solid fa-users text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-[#0f172a] mb-2">Wsparcie grupy</h4>
+                                <p class="text-slate-600 leading-relaxed font-medium">Używamy Social Technology. Dyskusje, projekty i gry angażujące zespół sprawiają, że nawet najbardziej zamknięci uczniowie powoli otwierają się i zaczynają używać języka bez lęku przed byciem wyśmianym.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-5">
+                            <div class="w-14 h-14 rounded-2xl bg-white border border-blue-200 text-blue-500 shadow-sm flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fa-solid fa-compass text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-[#0f172a] mb-2">Odpowiedzialność (Self-regulation)</h4>
+                                <p class="text-slate-600 leading-relaxed font-medium">Nie traktujemy ich jak dzieci. Uczymy planowania nauki i ponoszenia odpowiedzialności za swoje zaangażowanie. Ta umiejętność jest kluczowa w dorosłym życiu i na studiach.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-1 lg:order-2">
+                    <div class="aspect-square md:aspect-[4/5] rounded-[3rem] overflow-hidden shadow-xl relative border-8 border-white">
+                        <img src="https://a.storyblok.com/f/295239851056156/1792x2400/55436a858e/angielski-dla-mlodziezy-zory.jpeg" alt="Młodzież na zajęciach grupowych" class="w-full h-full object-cover">
+                        <!-- Nakładka z misiem (Polar) -->
+                        <div class="absolute bottom-6 right-6 w-24 h-24 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-slate-100 p-2 transform rotate-12 hover:rotate-0 transition-transform">
+                            <img src="/polar.png" alt="Polar Mascot" class="w-full h-full object-contain drop-shadow-md" onerror="this.style.display='none'; this.parentNode.innerHTML='<i class=\'fa-solid fa-star text-3xl text-yellow-400\'></i>'">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SEKACJA DLA RODZICÓW / EDU SKY -->
+    <section class="py-24 bg-[#0f172a] relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-[#F38160] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Relacja z Rodzicem</h2>
+            <h3 class="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-8">Zaufanie i Transparentność</h3>
+            <p class="text-lg text-slate-300 max-w-2xl mx-auto font-medium mb-16">
+                Twój nastolatek potrzebuje przestrzeni, ale Ty jako rodzic potrzebujesz wiedzieć, że inwestycja przynosi efekty. Zapewniamy pełną transparentność bez "szpiegowania".
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-[2rem] hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-[#F38160] text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm"><i class="fa-solid fa-file-lines"></i></div>
+                    <h4 class="text-white font-bold text-xl mb-3">Raportowanie postępów</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium">Brak tradycyjnych jedynek i piątek nie oznacza braku kontroli. Otrzymujesz rzetelny, opisowy feedback, który mówi wprost o tym, co idzie świetnie, a nad czym nastolatek musi popracować.</p>
+                </div>
+                
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-[2rem] hover:-translate-y-1 transition-transform relative overflow-hidden flex flex-col">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full mix-blend-overlay filter blur-3xl opacity-50"></div>
+                    <div class="w-14 h-14 bg-blue-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm relative z-10"><i class="fa-solid fa-mobile-screen"></i></div>
+                    <h4 class="text-white font-bold text-xl mb-3 relative z-10">Strefa Rodzica eduSky</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium relative z-10 flex-grow">
+                        Wszystko w jednym miejscu bez instalowania apek. W e-dzienniku sprawdzisz frekwencję, harmonogram, płatności i wiadomości od mentora.
+                    </p>
+                    <a href="https://homeofteddy.edusky.pl/" target="_blank" rel="noopener noreferrer" class="mt-6 text-white font-bold border-b border-blue-400 pb-1 hover:text-blue-300 self-start transition-colors relative z-10">
+                        Zaloguj się do e-dziennika &rarr;
+                    </a>
+                </div>
+                
+                <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-[2rem] hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-slate-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm"><i class="fa-solid fa-ear-listen"></i></div>
+                    <h4 class="text-white font-bold text-xl mb-3">Partner do rozmowy</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed font-medium">Gdy pojawiają się konflikty czy spadek motywacji (typowe w tym wieku), nie karzemy. Mediacje SNO (Spostrzeżenia, Nazwanie, Oczekiwania) pomagają nam dotrzeć do sedna problemu i wspólnie go rozwiązać.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEKCJA FAQ -->
+    <section class="py-24 bg-[#F8FAFC] border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Ważne pytania</h2>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] leading-tight">Odpowiadamy wprost</h3>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="text-lg font-bold text-[#0f172a] mb-3 flex items-start gap-3">
+                        <span class="text-[#F38160]">Q:</span> Czy uczycie pod egzamin ósmoklasisty / maturę?
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-sm font-medium">Tak, przygotowujemy do tych egzaminów, jednak robimy to inaczej niż typowe szkoły korepetytorskie. Oswajamy z arkuszem, ale główny nacisk kładziemy na to, by uczeń naprawdę *rozumiał* język. Płynność pozwala zdobyć na testach świetne wyniki bez stresu, a przy okazji młodzież potrafi się realnie dogadać.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="text-lg font-bold text-[#0f172a] mb-3 flex items-start gap-3">
+                        <span class="text-[#F38160]">Q:</span> Co jeśli mój nastolatek wstydzi się mówić w grupie?
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-sm font-medium">To najczęstszy problem, z jakim do nas przychodzą. Wynika on ze szkolnego strachu przed oceną błędu. Mentoring NVC i tzw. Social Technology sprawiają, że grupa staje się bezpiecznym środowiskiem. Nikt się nie śmieje, gdy ktoś się myli. Dzięki temu lęk znika naturalnie i bardzo szybko.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <h4 class="text-lg font-bold text-[#0f172a] mb-3 flex items-start gap-3">
+                        <span class="text-[#F38160]">Q:</span> Czy dajecie zadania domowe?
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-sm font-medium">W tradycyjnym sensie "zrób 5 stron ćwiczeń" – nie. Młodzież jest wystarczająco dociążona szkołą. Zachęcamy ich jednak do otaczania się angielskim w swoich pasjach (seriale, YouTube, gry) i uświadamiamy (Self-regulation), jak ogromny wpływ ma ten kontakt na ich wyniki i przyszłość.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KALKULATOR CEN -->
+    <PricingCalculator client:load title="Inwestycja w program Polars" />
+
+    <Footer />
+    
+    <LekcjaModal />
+    <ZapisyModal />
+
+    <!-- Skrypt do Modali -->
+    <script is:inline>
+        window.toggleModal = function(modalID) {
+            const modal = document.getElementById(modalID);
+            if(!modal) return;
+            
+            const backdrop = modal.querySelector('.modal-backdrop');
+            const panel = modal.querySelector('.modal-panel');
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; 
+                backdrop?.classList.add('opacity-100');
+                backdrop?.classList.remove('opacity-0');
+                panel?.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                document.body.style.overflow = 'hidden';
+            } else {
+                backdrop?.classList.remove('opacity-100');
+                backdrop?.classList.add('opacity-0');
+                panel?.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

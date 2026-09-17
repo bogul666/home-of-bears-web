@@ -1,0 +1,232 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import ZapisyModal from '../components/ZapisyModal.astro'; 
+import LekcjaModal from '../components/LekcjaModal.astro'; 
+import '../styles/global.css';
+
+const storyblokApi = useStoryblokApi();
+
+// Pobieranie ustawień globalnych (Nawigacja)
+let globalSettings = {};
+try {
+  const { data } = await storyblokApi.get('cdn/stories/ustawienia/global', {
+    version: import.meta.env.DEV ? "draft" : "published",
+  });
+  globalSettings = data.story;
+} catch (error) {
+  console.log("Używam domyślnego navbara, nie znaleziono ustawień globalnych");
+}
+---
+
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Praca i Kariera - Home of Bears</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans text-slate-800 bg-[#F8FAFC] antialiased overflow-x-hidden">
+
+    <Navbar blok={globalSettings?.content} />
+
+    <header class="relative pt-40 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-white border-b border-slate-100">
+        <!-- Dekoracyjne tło -->
+        <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#fdeae5] rounded-full mix-blend-multiply filter blur-[80px] -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-indigo-50 rounded-full mix-blend-multiply filter blur-[80px] translate-y-1/3 -translate-x-1/4"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <span class="inline-block py-1 px-3 rounded-full bg-[#fdeae5] text-[#e56742] font-bold text-sm tracking-wide mb-6 uppercase border border-[#fbc5b6]">
+                    Dołącz do naszego stada
+                </span>
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#0f172a] tracking-tight leading-[1.1] mb-8">
+                    Zmień edukację <br><span class="text-[#F38160]">razem z nami.</span>
+                </h1>
+                <p class="text-xl text-slate-600 mb-10 leading-relaxed font-medium">
+                    Nie szukamy tradycyjnych nauczycieli. Szukamy mentorów, pasjonatów i przewodników. Odłóż na bok czerwony długopis, zapomnij o testach i zacznij uczyć języka w sposób, w jaki sam chciałbyś być uczony.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#aplikuj" class="px-8 py-4 bg-[#F38160] text-white font-bold rounded-xl hover:bg-[#e56742] transition-all shadow-md text-lg">
+                        Sprawdź jak aplikować
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-24 bg-[#FCFAF5] overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Nasza Kultura</h2>
+                <h3 class="text-4xl font-extrabold text-[#0f172a] leading-tight mb-6">Więcej niż szkoła językowa</h3>
+                <p class="text-lg text-slate-600 font-medium">Praca u nas to bycie częścią rewolucji. Odrzucamy to, co w szkolnictwie toksyczne, a na piedestał stawiamy relację z drugim człowiekiem.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Zero Ocen -->
+                <div class="bg-white p-8 lg:p-10 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full">
+                    <div class="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center text-3xl mb-8 flex-shrink-0"><i class="fa-solid fa-ban"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl lg:text-2xl mb-4">Zero ocen i kar</h4>
+                    <p class="text-slate-600 leading-relaxed font-medium flex-grow">U nas błąd to naturalny proces nauki. Nie stawiamy jedynek, nie wstawiamy uwag, nie sprawdzamy obecności w dzienniku ze strachem. Stosujemy metodykę NVC (Porozumienie bez Przemocy).</p>
+                </div>
+
+                <!-- Bez podręczników -->
+                <div class="bg-white p-8 lg:p-10 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full">
+                    <div class="w-16 h-16 bg-[#fdeae5] text-[#F38160] rounded-2xl flex items-center justify-center text-3xl mb-8 flex-shrink-0"><i class="fa-solid fa-book-open-reader"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl lg:text-2xl mb-4">Brak wkuwania regułek</h4>
+                    <p class="text-slate-600 leading-relaxed font-medium flex-grow">Zapomnij o przerabianiu "unity po unicie" z nudnego podręcznika. Uczymy metodą Golden Division i Social Technology. Tworzysz zajęcia, które żyją, są pełne dyskusji i prawdziwych emocji.</p>
+                </div>
+
+                <!-- Szkolenia -->
+                <div class="bg-white p-8 lg:p-10 rounded-3xl shadow-sm border border-slate-100 hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full">
+                    <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center text-3xl mb-8 flex-shrink-0"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h4 class="font-bold text-[#0f172a] text-xl lg:text-2xl mb-4">Rozwój Mentorski</h4>
+                    <p class="text-slate-600 leading-relaxed font-medium flex-grow">Nie zostawiamy Cię samemu sobie. Oferujemy intensywne szkolenia wewnętrzne, wsparcie metodyka i ciągłą wymianę wiedzy z resztą zespołu. U nas stajesz się ekspertem komunikacji.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-white border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div class="order-2 lg:order-1 relative">
+                    <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Profil kandydata</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-[#0f172a] leading-tight mb-8">Kogo zapraszamy na pokład?</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-1"><i class="fa-solid fa-check"></i></div>
+                            <div>
+                                <h4 class="font-bold text-[#0f172a] text-lg">Biegłość językowa (C1/C2)</h4>
+                                <p class="text-slate-600">Nie musisz być po filologii, by świetnie uczyć, ale musisz swobodnie operować językiem angielskim, czuć jego flow i poprawność.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-1"><i class="fa-solid fa-check"></i></div>
+                            <div>
+                                <h4 class="font-bold text-[#0f172a] text-lg">Wysoka inteligencja emocjonalna</h4>
+                                <p class="text-slate-600">Empatia to nasza główna kompetencja. Oczekujemy otwartości na NVC, cierpliwości i umiejętności pracy z uczniami (i ich emocjami) w różnym wieku.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-1"><i class="fa-solid fa-check"></i></div>
+                            <div>
+                                <h4 class="font-bold text-[#0f172a] text-lg">Gotowość do „oduczenia się”</h4>
+                                <p class="text-slate-600">Szkoła systemowa ukształtowała w nas wiele nawyków (ocenianie, poprawianie każdego błędu, uciszanie). U nas musisz być gotowy, by zostawić to za drzwiami.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 mt-1"><i class="fa-solid fa-check"></i></div>
+                            <div>
+                                <h4 class="font-bold text-[#0f172a] text-lg">Zapał i energia</h4>
+                                <p class="text-slate-600">Zajęcia z młodszymi dziećmi (Pandas) to 100% czasu na dywanie, z użyciem "Dynamic English". Wymaga to zaangażowania, uśmiechu i kreatywności.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-1 lg:order-2">
+                    <div class="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative border-8 border-white">
+                        <img src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?auto=format&fit=crop&w=800&q=80" alt="Mentor podczas luźnej rozmowy z uczniem" class="w-full h-full object-cover">
+                        
+                        <!-- ZAKTUALIZOWANA NAKŁADKA INFORMACYJNA (Poprawa czytelności fontu) -->
+                        <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-white/20">
+                            <p class="font-bold text-[#0f172a] mb-2 text-lg"><i class="fa-solid fa-quote-left text-[#F38160] mr-2"></i>Studenci mile widziani!</p>
+                            <p class="text-sm text-slate-700 font-medium leading-relaxed drop-shadow-sm">Nie wymagamy dyplomów pedagogicznych z wyróżnieniem. Jeśli masz otwartą głowę i świetny angielski - przeszkolimy Cię z całej reszty.</p>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="aplikuj" class="py-24 bg-[#0f172a] relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#F38160] rounded-full mix-blend-multiply filter blur-[100px] opacity-20 -translate-y-1/2 translate-x-1/3"></div>
+        <div class="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-blue-500 rounded-full mix-blend-multiply filter blur-[100px] opacity-20 translate-y-1/3 -translate-x-1/4"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            
+            <h2 class="text-[#F38160] font-bold uppercase tracking-wider text-sm mb-3">Jak wygląda proces?</h2>
+            <h3 class="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-16">Gotowy na pierwszy krok?</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <!-- Krok 1 -->
+                <div class="bg-white/10 backdrop-blur-sm border border-white/10 p-8 rounded-[2rem] text-left">
+                    <div class="text-[#F38160] font-black text-5xl mb-4 opacity-50">01</div>
+                    <h4 class="text-white font-bold text-xl mb-3">Napisz do nas</h4>
+                    <p class="text-slate-300 font-medium text-sm">Wyślij nam swoje CV oraz krótką informację, dlaczego nasze podejście (NVC, zero ocen) rezonuje z Twoim stylem. Możesz to napisać całkowicie "po swojemu", bez sztywnych formułek.</p>
+                </div>
+                <!-- Krok 2 -->
+                <div class="bg-white/10 backdrop-blur-sm border border-white/10 p-8 rounded-[2rem] text-left">
+                    <div class="text-[#F38160] font-black text-5xl mb-4 opacity-50">02</div>
+                    <h4 class="text-white font-bold text-xl mb-3">Rozmowa i kawa</h4>
+                    <p class="text-slate-300 font-medium text-sm">Spotykamy się w naszej szkole na luźną rozmowę. Chcemy sprawdzić Twój poziom językowy (chwilę porozmawiamy po angielsku) i poznać Twoje spojrzenie na edukację.</p>
+                </div>
+                <!-- Krok 3 -->
+                <div class="bg-white/10 backdrop-blur-sm border border-white/10 p-8 rounded-[2rem] text-left">
+                    <div class="text-[#F38160] font-black text-5xl mb-4 opacity-50">03</div>
+                    <h4 class="text-white font-bold text-xl mb-3">Onboarding</h4>
+                    <p class="text-slate-300 font-medium text-sm">Jeśli poczujemy, że nadajemy na tych samych falach – witamy w zespole! Czeka Cię intensywne, ale fascynujące wdrożenie w naszą autorską metodykę, NVC i Golden Division.</p>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="bg-white rounded-[2rem] p-10 max-w-3xl mx-auto shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-16 -bottom-16 w-40 h-40 bg-slate-100 rounded-full"></div>
+                <h4 class="text-2xl font-extrabold text-[#0f172a] mb-4 relative z-10">Czekamy na Twoją wiadomość</h4>
+                <p class="text-slate-600 mb-8 relative z-10 font-medium">Wyślij dokumenty bezpośrednio na nasz adres mailowy dedykowany rekrutacji.</p>
+                
+                <a href="mailto:rekrutacja@homeofbears.pl?subject=Rekrutacja%20-%20Lektor/Mentor" class="inline-flex items-center justify-center w-full sm:w-auto px-10 py-5 bg-[#F38160] text-white font-bold rounded-xl hover:bg-[#e56742] transition-all shadow-[0_15px_30px_-10px_rgba(243,129,96,0.4)] hover:-translate-y-1 text-lg relative z-10">
+                    <i class="fa-solid fa-paper-plane mr-3"></i> rekrutacja@homeofbears.pl
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <Footer />
+    
+    <LekcjaModal />
+    <ZapisyModal />
+
+    <script is:inline>
+        window.toggleModal = function(modalID) {
+            const modal = document.getElementById(modalID);
+            if(!modal) return;
+            
+            const backdrop = modal.querySelector('.modal-backdrop');
+            const panel = modal.querySelector('.modal-panel');
+            
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; 
+                backdrop?.classList.add('opacity-100');
+                backdrop?.classList.remove('opacity-0');
+                panel?.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                document.body.style.overflow = 'hidden';
+            } else {
+                backdrop?.classList.remove('opacity-100');
+                backdrop?.classList.add('opacity-0');
+                panel?.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+                panel?.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
