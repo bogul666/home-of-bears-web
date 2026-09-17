@@ -12,29 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Pobranie kodu z repozytorium
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Konfiguracja Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      # 3. Instalacja zależności i budowanie projektu
       - name: Install dependencies & Build
         run: |
           npm install --legacy-peer-deps
           npm run build
 
-      # 4. Wgrywanie wygenerowanych plików na serwer FTP
-      - name: Upload via FTP
-        uses: MontiGo/ftp-deploy@v1
+      - name: Sync via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           local-dir: ./dist/
+          dangerous-clean-slate: true
