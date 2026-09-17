@@ -2,19 +2,21 @@ name: Deploy Astro Website to Hosting
 
 on:
   push:
-    branches: [ main ] # Uruchamia się po każdym pushu do gałęzi main
+    branches: [ main ]
   repository_dispatch:
-    types: [ storyblok_publish ] # Uruchamia się po kliknięciu Publish w Storybloku
-  workflow_dispatch: # Pozwala ręcznie kliknąć "Deploy" na GitHubie
+    types: [ storyblok_publish ]
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Pobranie kodu z repozytorium
+      # 1. Pobranie kodu bez sprawdzania historii Gita (zapobiega exit code 128)
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # 2. Konfiguracja Node.js
       - name: Setup Node.js
@@ -23,12 +25,13 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      # 3. Instalacja zależności i budowanie pliku dist
       - name: Install dependencies & Build
         run: |
           npm install --legacy-peer-deps
           npm run build
 
-      # 4. Wszycie automatycznego transferu plików FTP
+      # 4. Wgrywanie plików przez FTP
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -37,4 +40,3 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           local-dir: ./dist/
-          dangerous-clean-slate: false # Zabezpieczenie przed usuwaniem innych plików na serwerze
